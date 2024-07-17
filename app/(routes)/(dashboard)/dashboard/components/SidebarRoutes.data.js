@@ -1,0 +1,68 @@
+import {
+    Calendar,
+    Car,
+    Computer,
+    FileBarChart2,
+    FileQuestion, FolderOpen,
+    Logs,
+    Menu, RectangleEllipsis,
+    User,
+    UserRound,
+    UsersRound
+} from "lucide-react";
+
+
+export const dataSlidebarRoutes = [
+
+    {
+        icon: RectangleEllipsis,
+        label: "Menú",
+        href: "/dashboard",
+        section: "general"
+
+
+    },
+    {
+        icon: Logs,
+        label: "Logs",
+        href: "/logs",
+        section: "general"
+    },
+        {
+        icon: Computer,
+        label: "Computadoras",
+        href: "/computadoras",
+        section: "gestionar"
+
+    },
+    {
+        icon: User,
+        label: "Usuarios",
+        href: "/users",
+        section: "gestionar"
+
+    },
+    {
+        icon: UsersRound,
+        label: "Grupos",
+        href: "/grupos",
+        section: "gestionar"
+    },
+    {
+        icon: FolderOpen,
+        label: "Unidades organizativas",
+        href: "/unidades-organizativas",
+        section: "gestionar"
+    },
+    {
+        icon: FileQuestion,
+        label: "FAQ",
+        href: "/faq",
+        section: "soporte",
+    }
+
+
+
+
+
+]
