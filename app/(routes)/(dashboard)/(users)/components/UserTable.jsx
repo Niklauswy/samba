@@ -27,7 +27,7 @@ const UserTable = ({ users }) => (
     </CardContent>
     <CardFooter>
       <div className="text-xs text-muted-foreground">
-        Showing <strong>1-10</strong> of <strong>{users.length}</strong> products
+        Showing <strong>{users.length}</strong> users
       </div>
     </CardFooter>
   </Card>

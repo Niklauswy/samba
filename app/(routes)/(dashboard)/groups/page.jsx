@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Grupos = () => {
+const Groups = () => {
     return (
         <div>
             Estos son todos los grupos
@@ -8,4 +8,4 @@ const Grupos = () => {
     );
 };
 
-export default Grupos;
+export default Groups;

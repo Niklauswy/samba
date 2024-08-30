@@ -1,54 +1,151 @@
-import SearchBar from "../components/SearchBar"
-import TabsComponent from "../components/Tabs"
-import UserTable from "../components/UserTable"
+'use client';
+import React, {useState} from 'react';
+import SearchBar from "../components/SearchBar";
+import TabsComponent from "../components/Tabs";
+import UserTable from "../components/UserTable";
+import {Breadcrumb, BreadcrumbItem, BreadcrumbSeparator} from "@/components/ui/breadcrumb";
 
 export default function UsesPages() {
+    const [searchQuery, setSearchQuery] = useState('');
 
- const users = [
-  {
-    "id": 1,
-    "name": "Emiliano Nicolas Navarrete Rivera",
-    "career": "CS",
-    "totalLogs": 30,
-    "matricula": 369153,
-    "lastLogin": "2023-07-12 10:42 AM",
-    "image": "/placeholder.svg"
-  },
-  {
-    "id": 2,
-    "name": "Hypernova Headphones",
-    "career": "Active",
-    "totalLogs": 100,
-    "matricula": 100,
-    "lastLogin": "2023-10-18 03:21 PM",
-    "image": "/placeholder.svg"
-  },{
-    "id": 3,
-    "name": " Headphones",
-    "career": "Active",
-    "totalLogs": 100,
-    "matricula": 100,
-    "lastLogin": "2023-10-18 03:21 PM",
-    "image": "/placeholder.svg"
-         
+    const users = [
+        {
+            id: 1,
+            name: "Emiliano Nicolas Navarrete Rivera",
+            career: "CS",
+            totalLogs: 30,
+            matricula: 369153,
+            lastLogin: "2023-07-12 10:42 AM",
+            image: ""
+        },
+        {
+            id: 2,
+            name: "Hypernova Headphones",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 3,
+            name: "Headphones",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 4,
+            name: "Hypernova",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 5,
+            name: "Headphones",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 6,
+            name: "Hypernova",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 7,
+            name: "Headphones",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 8,
+            name: "Hypernova",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 9,
+            name: "Headphones",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 10,
+            name: "Hypernova",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 11,
+            name: "Headphones",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        },
+        {
+            id: 12,
+            name: "Hypernova",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        }, {
+            id: 13,
+            name: "Headphones",
+            career: "Active",
+            totalLogs: 100,
+            matricula: 100,
+            lastLogin: "2023-10-18 03:21 PM",
+            image: ""
+        }
+    ];
 
-     }
-  // Add more users as needed
-]
+    const filteredUsers = users.filter(user =>
+        user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-  return (
-    <div className="flex min-h-screen w-full flex-col">
-      <div className="flex flex-col sm:gap-4 sm:py-4">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
 
-          <SearchBar />
-        </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <TabsComponent>
-            <UserTable users={users} />
-          </TabsComponent>
-        </main>
-      </div>
-    </div>
-  )
+    return (
+        <div className="flex min-h-screen w-full flex-col">
+            <div className="flex flex-col sm:gap-4 sm:py-4">
+                <header
+                    className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+              
+                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+                </header>
+                <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+                    <TabsComponent>
+                        <UserTable users={filteredUsers}/>
+                    </TabsComponent>
+                </main>
+            </div>
+        </div>
+    );
 }
