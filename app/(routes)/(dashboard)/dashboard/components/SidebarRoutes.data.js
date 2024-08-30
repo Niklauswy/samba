@@ -45,7 +45,7 @@ export const dataSlidebarRoutes = [
     {
         icon: UsersRound,
         label: "Grupos",
-        href: "/grupos",
+        href: "/groups",
         section: "gestionar"
     },
     {
