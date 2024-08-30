@@ -1,0 +1,16 @@
+import React from 'react';
+import { TableCell, TableRow } from "@/components/ui/table";
+
+const LogRow = ({ log, index }) => {
+  const rowClass = index % 2 === 0 ? 'bg-gray-100' : 'bg-white';
+  return (
+    <TableRow className={rowClass}>
+      <TableCell>{log.user}</TableCell>
+      <TableCell>{log.ip}</TableCell>
+      <TableCell>{log.action}</TableCell>
+      <TableCell>{log.timestamp}</TableCell>
+    </TableRow>
+  );
+};
+
+export default LogRow;

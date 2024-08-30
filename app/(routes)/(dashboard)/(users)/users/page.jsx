@@ -9,122 +9,52 @@ export default function UsesPages() {
     const [searchQuery, setSearchQuery] = useState('');
 
     const users = [
-        {
-            id: 1,
-            name: "Emiliano Nicolas Navarrete Rivera",
-            career: "CS",
-            totalLogs: 30,
-            matricula: 369153,
-            lastLogin: "2023-07-12 10:42 AM",
-            image: ""
-        },
-        {
+   {
             id: 2,
-            name: "Hypernova Headphones",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
+            username: "Batman",
+            name: "Bruce Wayne, el caballero de la noche",
+            ou: "MAT",
+            group: "estudiante",
+            totalLogs: 12,
+            lastLogin: "2023-07-12 10:41 AM",
             image: ""
-        },
-        {
+        },{
             id: 3,
-            name: "Headphones",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
+            username: "Superman",
+            name: "Clark Kent",
+            ou: "FIS",
+            group: "estudiante",
+            totalLogs: 12,
+            lastLogin: "2023-07-12 10:23 AM",
+        },{
             id: 4,
-            name: "Hypernova",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
+            username: "Flash",
+            name: "Barry Allen",
+            ou: "FIS",
+            group: "estudiante",
+            totalLogs: 12,
+            lastLogin: "2023-07-11 10:23 AM",
+
+        },{
             id: 5,
-            name: "Headphones",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
+            username: "Wonder woman",
+            name: "Diana Prince",
+            ou: "CS",
+            group: "estudiante",
+            totalLogs: 12,
+            lastLogin: "2023-07-11 10:23 AM",
+
+        },{
             id: 6,
-            name: "Hypernova",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
-            id: 7,
-            name: "Headphones",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
-            id: 8,
-            name: "Hypernova",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
-            id: 9,
-            name: "Headphones",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
-            id: 10,
-            name: "Hypernova",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
-            id: 11,
-            name: "Headphones",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        },
-        {
-            id: 12,
-            name: "Hypernova",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
-        }, {
-            id: 13,
-            name: "Headphones",
-            career: "Active",
-            totalLogs: 100,
-            matricula: 100,
-            lastLogin: "2023-10-18 03:21 PM",
-            image: ""
+            username: "Aquaman",
+            name: "Arthur Curry",
+            ou: "CDD",
+            group: "estudiante",
+            totalLogs: 11111,
+            lastLogin: "2021-07-11 10:23 AM",
         }
+
+
     ];
 
     const filteredUsers = users.filter(user =>
@@ -137,7 +67,7 @@ export default function UsesPages() {
             <div className="flex flex-col sm:gap-4 sm:py-4">
                 <header
                     className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-              
+
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
                 </header>
                 <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">

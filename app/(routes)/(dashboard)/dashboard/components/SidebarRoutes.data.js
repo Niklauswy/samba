@@ -5,7 +5,7 @@ import {
     FileBarChart2,
     FileQuestion, FolderOpen,
     Logs,
-    Menu, RectangleEllipsis,
+    Menu, RectangleEllipsis, SettingsIcon,
     User,
     UserRound,
     UsersRound
@@ -28,7 +28,7 @@ export const dataSlidebarRoutes = [
         href: "/logs",
         section: "general"
     },
-        {
+    {
         icon: Computer,
         label: "Computadoras",
         href: "/computadoras",
@@ -53,16 +53,18 @@ export const dataSlidebarRoutes = [
         label: "Unidades organizativas",
         href: "/unidades-organizativas",
         section: "gestionar"
+    }, {
+        icon: SettingsIcon,
+        label: "Configuración",
+        href: "/settings",
+        section: "soporte"
     },
     {
         icon: FileQuestion,
         label: "FAQ",
         href: "/faq",
         section: "soporte",
-    }
-
-
-
+    },
 
 
 ]
