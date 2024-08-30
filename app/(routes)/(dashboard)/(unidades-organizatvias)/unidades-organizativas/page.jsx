@@ -26,6 +26,8 @@ const units = [
   { name: 'BIO', description: 'Estudiantes de Biologia', users: 50, gradient: 'bg-gradient-to-r from-green-500 to-green-700', icon: <Users size={20} /> },
   { name: 'TCCE', description: 'Estudiante del tronco comun de ciencias exactas', users: 50, gradient: 'bg-gradient-to-r from-yellow-500 to-yellow-700', icon: <Users size={20} /> },
   { name: 'TCCN', description: 'Estudiante del tronco comun de ciencias naturales', users: 60, gradient: 'bg-gradient-to-r from-gray-500 to-gray-700', icon: <Users size={20} /> },
+  {name: 'MYDCI',description:'Maestra  y Doctorado en Ciencias e Ingenieria ', users: 70, gradient: 'bg-gradient-to-r from-indigo-500 to-indigo-700', icon: <Users size={20} /> },
+  {name:'MEZA',description: 'Manejo de ecosistemas en zonas aridas', users: 80, gradient: 'bg-gradient-to-r from-pink-500 to-pink-700', icon: <Users size={20} /> },
 ];
 
 const chartData = units.map(unit => ({
@@ -49,7 +51,7 @@ const OrganizationalUnits = () => {
 
   return (
     <div className="m-8">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-9">
         {units.map((unit, index) => (
           <Card key={index} className="max-w-xs mb-4 shadow-lg rounded-lg overflow-hidden transform transition-transform hover:scale-105 hover:shadow-2xl border border-gray-200">
             <CardHeader className={`${unit.gradient} p-4 flex items-center justify-between`}>

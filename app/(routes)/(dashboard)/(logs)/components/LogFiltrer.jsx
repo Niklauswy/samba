@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import DatePickerWithRange from "./DatePickerWithRange";
 import Combobox from "./Combobox";
 
 const LogFilter = ({ logs, filters, setFilters }) => {
+  const [reset, setReset] = useState(false);
+
   const uniqueUsers = [...new Set(logs.map(log => log.user))];
   const uniqueIPs = [...new Set(logs.map(log => log.ip))];
   const uniqueEventTypes = [...new Set(logs.map(log => log.action))];
@@ -14,6 +16,12 @@ const LogFilter = ({ logs, filters, setFilters }) => {
 
   const handleDateChange = (dateRange) => {
     setFilters(prevFilters => ({ ...prevFilters, dateRange }));
+  };
+
+  const handleClearFilters = () => {
+    setFilters({ user: '', dateRange: '', ip: '', eventType: '' });
+    setReset(true);
+    setTimeout(() => setReset(false), 0); // Reset the reset state
   };
 
   return (
@@ -37,8 +45,8 @@ const LogFilter = ({ logs, filters, setFilters }) => {
           onChange={(value) => handleSelectChange('eventType', value)}
           value={filters.eventType}
         />
-        <DatePickerWithRange onChange={handleDateChange} />
-              <Button onClick={() => setFilters({ user: '', dateRange: '', ip: '', eventType: '' })}>Limpiar Filtros</Button>
+        <DatePickerWithRange onChange={handleDateChange} reset={reset} />
+              <Button onClick={handleClearFilters}>Limpiar Filtros</Button>
 
       </div>
     </div>

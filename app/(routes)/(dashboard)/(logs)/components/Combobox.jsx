@@ -1,26 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
+import { ChevronsUpDown, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Combobox = ({ options, placeholder, onChange, value }) => {
-  const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState(value || "");
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     setInputValue(value || "");
@@ -48,7 +37,10 @@ const Combobox = ({ options, placeholder, onChange, value }) => {
           <CommandInput
             placeholder={`Search ${placeholder.toLowerCase()}...`}
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              setOpen(true);
+            }}
           />
           <CommandList>
             <CommandEmpty>No {placeholder.toLowerCase()} found.</CommandEmpty>
@@ -58,8 +50,9 @@ const Combobox = ({ options, placeholder, onChange, value }) => {
                   key={option}
                   value={option}
                   onSelect={(currentValue) => {
-                    setInputValue(currentValue === inputValue ? "" : currentValue);
-                    onChange(currentValue);
+                    const newValue = currentValue === inputValue ? "" : currentValue;
+                    setInputValue(newValue);
+                    onChange(newValue);
                     setOpen(false);
                   }}
                 >
