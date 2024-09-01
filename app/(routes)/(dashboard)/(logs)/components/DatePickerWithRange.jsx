@@ -1,96 +1,122 @@
 "use client";
 
 import * as React from "react";
-import { addDays, format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { DateRange } from "react-day-picker";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import {format, parse, addDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth} from "date-fns";
+import {es} from "date-fns/locale";
+import {Calendar as CalendarIcon} from "lucide-react";
+import {cn} from "@/lib/utils";
+import {Button} from "@/components/ui/button";
+import {Calendar} from "@/components/ui/calendar";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 
-const DatePickerWithRange = ({ onChange, className }) => {
-const [date, setDate] = React.useState({
-  from: new Date(2022, 0, 20),
-  to: addDays(new Date(2022, 0, 20), 20),
-});
+const DatePickerWithRange = ({onChange, reset, className}) => {
+    const [date, setDate] = React.useState(null);
 
-  const handleDateChange = (selectedDate) => {
-    setDate(selectedDate);
-    onChange(selectedDate);
-  };
+    React.useEffect(() => {
+        if (reset) {
+            setDate(null);
+        }
+    }, [reset]);
 
-  return (
-    <div className={cn("grid gap-2", className)}>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            id="date"
-            variant={"outline"}
-            className={cn(
-              "w-[300px] justify-start text-left font-normal",
-              !date && "text-muted-foreground"
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
-              ) : (
-                format(date.from, "LLL dd, y")
-              )
-            ) : (
-              <span>Pick a date</span>
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Select
-            onValueChange={(value) =>
-              handleDateChange({
-                from: new Date(),
-                to: addDays(new Date(), parseInt(value)),
-              })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent position="popper">
-              <SelectItem value="0">Today</SelectItem>
-              <SelectItem value="1">Tomorrow</SelectItem>
-              <SelectItem value="3">In 3 days</SelectItem>
-              <SelectItem value="7">In a week</SelectItem>
-            </SelectContent>
-          </Select>
-          <div className="rounded-md border">
-            <Calendar
-              initialFocus
-              mode="range"
-              defaultMonth={date?.from}
-              selected={date}
-              onSelect={handleDateChange}
-              numberOfMonths={2}
-            />
-          </div>
-        </PopoverContent>
-      </Popover>
-    </div>
-  );
+    const handleDateChange = (selectedDate) => {
+        setDate(selectedDate);
+        onChange(selectedDate);
+    };
+
+    const handleRelativeDateChange = (option) => {
+        let from, to;
+
+        switch (option) {
+            case "this_week":
+                from = startOfWeek(new Date(), {weekStartsOn: 1});
+                to = endOfWeek(new Date(), {weekStartsOn: 1});
+                break;
+            case "this_month":
+                from = startOfMonth(new Date());
+                to = endOfMonth(new Date());
+                break;
+            case "2024-2":
+                from = new Date(2024, 7, 12);
+                to = new Date(2024, 10, 30);
+                break;
+            case "2025-1":
+                from = new Date(2025, 0, 27);
+                to = new Date(2024, 4, 30);
+                break;
+            default:
+                from = to = new Date();
+        }
+
+        handleDateChange({from, to});
+    };
+
+    return (
+        <div className={cn("grid gap-2", className)}>
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button
+                        id="date"
+                        variant={"outline"}
+                        className={cn(
+                            "w-[300px] justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                        )}
+                    >
+                        <CalendarIcon className="mr-2 h-4 w-4"/>
+                        {date?.from ? (
+                            date.to ? (
+                                <>
+                                    {format(date.from, "dd/MM/yyyy", {locale: es})} -{" "}
+                                    {format(date.to, "dd/MM/yyyy", {locale: es})}
+                                </>
+                            ) : (
+                                format(date.from, "dd/MM/yyyy", {locale: es})
+                            )
+                        ) : (
+                            <span>Seleccionar fecha</span>
+                        )}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                    <Select
+                        onValueChange={handleRelativeDateChange}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar rango preferido"/>
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                            <SelectItem value="this_week">Esta semana</SelectItem>
+                            <SelectItem value="this_month">Este mes</SelectItem>
+                            <SelectItem value="2024-2">Periodo 2024-2 </SelectItem>
+                            <SelectItem value="2025-1">Periodo 2025-1 </SelectItem>
+
+                        </SelectContent>
+                    </Select>
+                    <div className="rounded-md border mt-2">
+                        <Calendar
+                            initialFocus
+                            mode="range"
+                            defaultMonth={date?.from}
+                            selected={date}
+                            onSelect={handleDateChange}
+                            numberOfMonths={2}
+                        />
+                    </div>
+                </PopoverContent>
+            </Popover>
+        </div>
+    );
 };
 
 export default DatePickerWithRange;

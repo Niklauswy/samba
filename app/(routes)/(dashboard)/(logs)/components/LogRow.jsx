@@ -7,8 +7,8 @@ const LogRow = ({ log, index }) => {
     <TableRow className={rowClass}>
       <TableCell>{log.user}</TableCell>
       <TableCell>{log.ip}</TableCell>
-      <TableCell>{log.action}</TableCell>
-      <TableCell>{log.timestamp}</TableCell>
+      <TableCell>{log.event}</TableCell>
+      <TableCell>{log.date}</TableCell>
     </TableRow>
   );
 };

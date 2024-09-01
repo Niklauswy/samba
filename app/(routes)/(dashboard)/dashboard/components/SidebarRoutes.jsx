@@ -31,7 +31,7 @@ const SidebarRoutes = () => {
             </div>
             <div className="p-2 md:p-6  text-black">
 
-                <p className="mb-2 text-slate-500 text-xs font-semibold uppercase text-center">UABC 20224 COPYRIGHT</p>
+                <p className="mb-2 text-slate-500 text-xs font-semibold uppercase text-center">UABC 2024 COPYRIGHT</p>
 
 
             </div>

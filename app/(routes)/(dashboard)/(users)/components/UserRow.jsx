@@ -8,14 +8,14 @@ import { TableCell, TableRow } from "@/components/ui/table";
 const UserRow = ({ user, onEdit }) => (
   <TableRow>
     <TableCell className="hidden sm:table-cell">
-      <Image alt="Product image" className="aspect-square rounded-md object-cover" height="64" src={user.image} width="64" />
+      <Image alt="Product image" className="aspect-square rounded-md object-cover" height="64"  src={`https://robohash.org/${user.name}?set=set1`}  width="64" />
     </TableCell>
     <TableCell className="font-medium">{user.username}</TableCell>
     <TableCell className="font-medium">{user.name}</TableCell>
     <TableCell><Badge variant="primary" className="bg-red-400 text-white">{user.ou}</Badge></TableCell>
-    <TableCell>{user.totalLogs}</TableCell>
+    <TableCell>{user.logonCount}</TableCell>
     <TableCell className="hidden md:table-cell">{user.group}</TableCell>
-    <TableCell className="hidden md:table-cell">{user.lastLogin}</TableCell>
+    <TableCell className="hidden md:table-cell">{user.lastLogon}</TableCell>
     <TableCell>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -26,8 +26,8 @@ const UserRow = ({ user, onEdit }) => (
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={onEdit}>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Delete</DropdownMenuItem>
+          <DropdownMenuItem onClick={onEdit}>Editar</DropdownMenuItem>
+          <DropdownMenuItem>Eliminar</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </TableCell>

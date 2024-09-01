@@ -61,17 +61,17 @@ const UserTable = ({ users }) => {
                 <TableHead>Usuario</TableHead>
                 <TableHead>Nombre</TableHead>
                 <TableHead>Carrera</TableHead>
-                <TableHead className="hidden md:table-cell" onClick={() => handleSort('totalLogs')}>
-                  Total logs {getSortIndicator('totalLogs')}
+                <TableHead className="hidden md:table-cell" onClick={() => handleSort('logonCount')}>
+                  Total logs {getSortIndicator('logonCount')}
                 </TableHead>
                 <TableHead className="hidden md:table-cell">Grupo</TableHead>
-                <TableHead onClick={() => handleSort('lastLogin')}>
-                  Ultimo inicio {getSortIndicator('lastLogin')}<span className="sr-only">Actions</span>
+                <TableHead onClick={() => handleSort('lastLogon')}>
+                  Ultimo inicio {getSortIndicator('lastLogon')}<span className="sr-only">Actions</span>
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sortedUsers.map(user => <UserRow key={user.id} user={user} onEdit={() => openDialog(user)} />)}
+              {sortedUsers.map(user => <UserRow key={user.username} user={user} onEdit={() => openDialog(user)} />)}
             </TableBody>
           </Table>
         </CardContent>

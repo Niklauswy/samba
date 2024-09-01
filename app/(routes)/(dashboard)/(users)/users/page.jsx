@@ -1,67 +1,42 @@
 'use client';
-import React, {useState} from 'react';
+
+import React, {useState, useEffect} from 'react';
 import SearchBar from "../components/SearchBar";
 import TabsComponent from "../components/Tabs";
 import UserTable from "../components/UserTable";
-import {Breadcrumb, BreadcrumbItem, BreadcrumbSeparator} from "@/components/ui/breadcrumb";
 
-export default function UsesPages() {
+export default function UserPage() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [users, setUsers] = useState([]);
 
-    const users = [
-   {
-            id: 2,
-            username: "Batman",
-            name: "Bruce Wayne, el caballero de la noche",
-            ou: "MAT",
-            group: "estudiante",
-            totalLogs: 12,
-            lastLogin: "2023-07-12 10:41 AM",
-            image: ""
-        },{
-            id: 3,
-            username: "Superman",
-            name: "Clark Kent",
-            ou: "FIS",
-            group: "estudiante",
-            totalLogs: 12,
-            lastLogin: "2023-07-12 10:23 AM",
-        },{
-            id: 4,
-            username: "Flash",
-            name: "Barry Allen",
-            ou: "FIS",
-            group: "estudiante",
-            totalLogs: 12,
-            lastLogin: "2023-07-11 10:23 AM",
-
-        },{
-            id: 5,
-            username: "Wonder woman",
-            name: "Diana Prince",
-            ou: "CS",
-            group: "estudiante",
-            totalLogs: 12,
-            lastLogin: "2023-07-11 10:23 AM",
-
-        },{
-            id: 6,
-            username: "Aquaman",
-            name: "Arthur Curry",
-            ou: "CDD",
-            group: "estudiante",
-            totalLogs: 11111,
-            lastLogin: "2021-07-11 10:23 AM",
+    useEffect(() => {
+        async function fetchUsers() {
+            try {
+                const res = await fetch("http://localhost:5000/api/users", {
+                    cache: 'no-store'
+                });
+                const data = await res.json();
+                setUsers(data);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
         }
 
-
-    ];
-
-    const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+        fetchUsers();
 
 
+        const intervalId = setInterval(() => {
+            fetchUsers();
+        }, 5000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const filteredUsers = users.filter(user => {
+        return [user.name.toLowerCase(), user.username.toLowerCase()].some(field =>
+            field.includes(searchQuery.toLowerCase())
+        );
+    });
     return (
         <div className="flex min-h-screen w-full flex-col">
             <div className="flex flex-col sm:gap-4 sm:py-4">

@@ -17,53 +17,56 @@ const UserDetails = ({ user, isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit User</DialogTitle>
-          <DialogDescription>Modify the user details below.</DialogDescription>
+          <DialogTitle>Editar usuario</DialogTitle>
+          <DialogDescription>Modificar datos de usuario</DialogDescription>
         </DialogHeader>
         <form className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Username</label>
-              <Input type="text" value={user.username} className="mt-1 block w-full bg-gray-100" readOnly />
+              <label className="block text-sm font-medium text-gray-700">Usuario</label>
+              <Input type="text" value={user.username} className="mt-1 block w-full bg-gray-100" readOnly/>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
-              <Input type="text" value={user.name} className="mt-1 block w-full bg-gray-100" readOnly />
+              <label className="block text-sm font-medium text-gray-700">Nombre</label>
+              <Input type="text" value={user.name} className="mt-1 block w-full bg-gray-100"
+                     readOnly/>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Group</label>
-              <Input type="text" value={user.group} className="mt-1 block w-full bg-gray-100" readOnly />
+              <label className="block text-sm font-medium text-gray-700">Grupo</label>
+              <Input type="text" value={user.group} className="mt-1 block w-full bg-gray-100" readOnly/>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Organizational Unit (OU)</label>
-              <Input type="text" value={user.ou} className="mt-1 block w-full bg-gray-100" readOnly />
+              <label className="block text-sm font-medium text-gray-700">Unidad organizacional (OU)</label>
+              <Input type="text" value={user.ou} className="mt-1 block w-full bg-gray-100" readOnly/>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Last Login</label>
-              <Input type="text" value={user.lastLogin} className="mt-1 block w-full bg-gray-100" readOnly />
+              <label className="block text-sm font-medium text-gray-700">Último Login</label>
+              <Input type="text" value={user.lastLogon} className="mt-1 block w-full bg-gray-100" readOnly/>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Total Logins</label>
-              <Input type="text" value={user.totalLogs} className="mt-1 block w-full bg-gray-100" readOnly />
+              <label className="block text-sm font-medium text-gray-700">Num. de logins</label>
+              <Input type="text" value={user.logonCount} className="mt-1 block w-full bg-gray-100" readOnly/>
             </div>
           </div>
           <div className="mt-6">
-            <h3 className="text-lg font-medium text-gray-900">Change Password</h3>
+            <h3 className="text-lg font-medium text-gray-900">Cambiar contraseña </h3>
             <div className="mt-2">
-              <label className="block text-sm font-medium text-gray-700">New Password</label>
               <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full"
+                  type="password"
+                  placeholder="Nueva contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1 block w-full"
               />
             </div>
             <div className="mt-4">
-              <Button onClick={handlePasswordChange}>Save Changes</Button>
+              <Button onClick={handlePasswordChange}>Guardar cambios</Button>
             </div>
           </div>
+
         </form>
         <DialogFooter>
+
           <Button onClick={onClose}>Close</Button>
         </DialogFooter>
       </DialogContent>

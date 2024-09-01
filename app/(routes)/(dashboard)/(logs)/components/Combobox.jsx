@@ -4,10 +4,10 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
-import { ChevronsUpDown, Check } from "lucide-react";
+import { ChevronsUpDown, Check, User } from "lucide-react"; // Importa el ícono que prefieras
 import { cn } from "@/lib/utils";
 
-const Combobox = ({ options, placeholder, onChange, value }) => {
+const Combobox = ({ options, placeholder, onChange, value, icon: Icon }) => {
   const [inputValue, setInputValue] = React.useState(value || "");
   const [open, setOpen] = React.useState(false);
 
@@ -28,6 +28,8 @@ const Combobox = ({ options, placeholder, onChange, value }) => {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
+          {/* Aquí se agrega el ícono */}
+          {Icon && <Icon className="mr-2 h-4 w-4" />}
           {inputValue || placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -35,15 +37,14 @@ const Combobox = ({ options, placeholder, onChange, value }) => {
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput
-            placeholder={`Search ${placeholder.toLowerCase()}...`}
-            value={inputValue}
+            placeholder={`${placeholder}...`}
             onChange={(e) => {
               setInputValue(e.target.value);
               setOpen(true);
             }}
           />
           <CommandList>
-            <CommandEmpty>No {placeholder.toLowerCase()} found.</CommandEmpty>
+            <CommandEmpty>No se encontró tal {placeholder}.</CommandEmpty>
             <CommandGroup>
               {filteredOptions.map(option => (
                 <CommandItem
