@@ -47,12 +47,12 @@ const DatePickerWithRange = ({onChange, reset, className}) => {
                 to = endOfMonth(new Date());
                 break;
             case "2024-2":
-                from = new Date(2024, 7, 12);
-                to = new Date(2024, 10, 30);
+                from = parse("2024 Jul 23 05:02:45", "yyyy MMM dd HH:mm:ss", new Date());
+                to = parse("2024 Nov 30 05:02:45", "yyyy MMM dd HH:mm:ss", new Date());
                 break;
             case "2025-1":
-                from = new Date(2025, 0, 27);
-                to = new Date(2024, 4, 30);
+                from = parse("2025 Jan 27 05:02:45", "yyyy MMM dd HH:mm:ss", new Date());
+                to = parse("2025 May 30 05:02:45", "yyyy MMM dd HH:mm:ss", new Date());
                 break;
             default:
                 from = to = new Date();

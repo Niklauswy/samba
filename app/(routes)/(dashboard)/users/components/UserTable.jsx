@@ -79,6 +79,7 @@ const UserTable = ({ users }) => {
           <div className="text-xs text-muted-foreground">
             Showing <strong>{users.length}</strong> users
           </div>
+
         </CardFooter>
       </Card>
       <UserDialog user={selectedUser} isOpen={isDialogOpen} onClose={closeDialog} />

@@ -1,9 +1,23 @@
-import React from 'react';
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+'use client'
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import LogRow from "./LogRow";
+import CustomPagination from "@/components/ui/CustomPagination";
 
-const LogTable = ({logs}) => {
+const LogTable = ({ logs }) => {
+    const pageSize = 10;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentLogs, setCurrentLogs] = useState([]);
+    const totalPages = Math.ceil(logs.length / pageSize);
+
+    useEffect(() => {
+        setCurrentLogs(logs.slice((currentPage - 1) * pageSize, currentPage * pageSize));
+    }, [logs, currentPage]);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
         <Card>
@@ -24,14 +38,19 @@ const LogTable = ({logs}) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {logs.map(log => <LogRow key={log.id} log={log}/>)}
+                        {currentLogs.map(log => <LogRow key={log.id} log={log} />)}
                     </TableBody>
                 </Table>
             </CardContent>
             <CardFooter>
                 <div className="text-xs text-muted-foreground">
-                    Mostrando <strong>{logs.length}</strong> logs
+                    Mostrando <strong>{currentLogs.length}</strong> de <strong>{logs.length}</strong> logs
                 </div>
+                <CustomPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
             </CardFooter>
         </Card>
     );

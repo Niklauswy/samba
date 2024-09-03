@@ -1,9 +1,9 @@
 'use client';
 
 import React, {useState, useEffect} from 'react';
-import SearchBar from "../components/SearchBar";
-import TabsComponent from "../components/Tabs";
-import UserTable from "../components/UserTable";
+import SearchBar from "@/app/(routes)/(dashboard)/users/components/SearchBar";
+import TabsComponent from "@/app/(routes)/(dashboard)/users/components/Tabs";
+import UserTable from "@/app/(routes)/(dashboard)/users/components/UserTable";
 
 export default function UserPage() {
     const [searchQuery, setSearchQuery] = useState('');

@@ -1,5 +1,3 @@
-'use client';
-
 import * as React from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 import {
@@ -10,31 +8,34 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { parse, format, addDays } from 'date-fns';
 
 const chartConfig = {
   logs: {
     label: 'Logs',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(var(--chart-2))',
   },
-} satisfies ChartConfig;
+};
 
 const calculateLogsPerDay = (logs) => {
   const logsPerDay = {};
 
   logs.forEach((log) => {
-    const date = log.date.split(' ')[0]; // Extract the date part
+    const logDateObj = parse(log.date, 'yyyy MMM dd HH:mm:ss', new Date());
+    const correctedDate = addDays(logDateObj, 1); // Correct the date by adding one day
+    const date = format(correctedDate, 'yyyy-MM-dd'); // Format to ISO date string (yyyy-MM-dd)
     if (!logsPerDay[date]) {
       logsPerDay[date] = 0;
     }
     logsPerDay[date]++;
   });
 
-  return Object.keys(logsPerDay).map((date) => ({
+  const sortedDates = Object.keys(logsPerDay).sort((a, b) => new Date(a) - new Date(b));
+  return sortedDates.map((date) => ({
     date,
     logs: logsPerDay[date],
   }));
@@ -47,7 +48,7 @@ export function LogBarChart({ logs }) {
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <CardTitle>Bar Chart - Logs</CardTitle>
+          <CardTitle>Historic</CardTitle>
           <CardDescription>
             Showing total logs per day
           </CardDescription>
@@ -87,7 +88,8 @@ export function LogBarChart({ logs }) {
                   className="w-[150px]"
                   nameKey="logs"
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString('en-US', {
+                    const date = new Date(value);
+                    return date.toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric',
