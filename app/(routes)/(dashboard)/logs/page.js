@@ -1,8 +1,8 @@
 'use client';
 import React, {useEffect, useState} from 'react';
-import SearchBar from "../../(users)/components/SearchBar";
-import LogTable from "../components/LogTable";
-import LogFilter from "../components/LogFiltrer";
+import SearchBar from "../(users)/components/SearchBar";
+import LogTable from "@/app/(routes)/(dashboard)/logs/components/LogTable";
+import LogFilter from "@/app/(routes)/(dashboard)/logs/components/LogFiltrer";
 
 export default function Logs() {
     const [searchQuery, setSearchQuery] = useState('');

@@ -26,7 +26,7 @@ export const dataSlidebarRoutes = [
         icon: Logs,
         label: "Logs",
         href: "/logs",
-        section: "general"
+        section: "gestionar"
     },
     {
         icon: Computer,
@@ -65,6 +65,13 @@ export const dataSlidebarRoutes = [
         href: "/faq",
         section: "soporte",
     },
+    {
+        icon: FileBarChart2,
+        label: "Reportes",
+        href: "/reports",
+        section: "general"
+
+    }
 
 
 ]

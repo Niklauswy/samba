@@ -16,7 +16,9 @@ const LogTable = ({logs}) => {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Usuario</TableHead>
-                            <TableHead>IP de la computadora</TableHead>
+                            <TableHead>IP</TableHead>
+                            <TableHead>Computadora</TableHead>
+                            <TableHead>Laboratorio</TableHead>
                             <TableHead>Evento</TableHead>
                             <TableHead>Fecha</TableHead>
                         </TableRow>

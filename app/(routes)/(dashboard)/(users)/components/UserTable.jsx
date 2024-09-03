@@ -51,7 +51,7 @@ const UserTable = ({ users }) => {
       <Card x-chunk="dashboard-06-chunk-0">
         <CardHeader>
           <CardTitle>Usuarios</CardTitle>
-          <CardDescription>Usuarios en el activde directory</CardDescription>
+          <CardDescription>Usuarios en el active directory</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
