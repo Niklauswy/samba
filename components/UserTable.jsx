@@ -61,19 +61,10 @@ export default function UserTable({ initialUsers }) {
     const [sortDirection, setSortDirection] = useState("asc");
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const updatedUsers = await fetchUsers();
-                setUsers(updatedUsers);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        const intervalId = setInterval(fetchData, 10000);
-
-        // Initial fetch
-        fetchData();
+        const intervalId = setInterval(async () => {
+            const updatedUsers = await fetchUsers();
+            setUsers(updatedUsers);
+        }, 10000);
 
         return () => clearInterval(intervalId);
     }, []);

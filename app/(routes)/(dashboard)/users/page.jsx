@@ -1,3 +1,5 @@
+'use client';
+
 import { fetchUsers } from '@/app/API/data';
 import UserTable from '@/components/UserTable';
 
