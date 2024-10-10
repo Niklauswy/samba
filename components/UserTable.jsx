@@ -64,7 +64,7 @@ export default function UserTable({ initialUsers }) {
         const intervalId = setInterval(async () => {
             const updatedUsers = await fetchUsers();
             setUsers(updatedUsers);
-        }, 5000);
+        }, 10000);
 
         return () => clearInterval(intervalId);
     }, []);
