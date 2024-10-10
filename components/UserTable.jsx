@@ -48,8 +48,7 @@ const columns = [
     { key: "accion", label: "", fixed: true },
 ];
 
-export default function UserTable({ initialUsers }) {
-    const [users, setUsers] = useState(initialUsers);
+export default function UserTable({ users }) {
     const [filter, setFilter] = useState("");
     const [selectedCarreras, setSelectedCarreras] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
@@ -60,14 +59,6 @@ export default function UserTable({ initialUsers }) {
     const [sortColumn, setSortColumn] = useState(null);
     const [sortDirection, setSortDirection] = useState("asc");
 
-    useEffect(() => {
-        const intervalId = setInterval(async () => {
-            const updatedUsers = await fetchUsers();
-            setUsers(updatedUsers);
-        }, 10000);
-
-        return () => clearInterval(intervalId);
-    }, []);
 
     const allCarreras = useMemo(() => [...new Set(users.map((user) => user.ou).filter((ou) => ou))], [users]);
     const allGroups = useMemo(() => [...new Set(users.map((user) => user.group))], [users]);

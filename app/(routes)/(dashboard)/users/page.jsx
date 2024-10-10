@@ -1,19 +1,32 @@
-'use client';
+'use client'; // Esto es importante para habilitar el renderizado en el cliente
 
+import { useEffect, useState } from 'react';
 import { fetchUsers } from '@/app/API/data';
 import UserTable from '@/components/UserTable';
 
-async function getInitialUsers() {
-  return await fetchUsers();
-}
+export default function UsersPage() {
+    const [users, setUsers] = useState([]);
 
-export default async function UsersPage() {
-  const initialUsers = await getInitialUsers();
+    useEffect(() => {
+        const fetchInitialUsers = async () => {
+            const initialUsers = await fetchUsers();
+            setUsers(initialUsers);
+        };
 
-  return (
-      <div>
-        <h1>Usuarios</h1>
-        <UserTable initialUsers={initialUsers} />
-      </div>
-  );
+        fetchInitialUsers();
+
+        const intervalId = setInterval(async () => {
+            const updatedUsers = await fetchUsers();
+            setUsers(updatedUsers);
+        }, 10000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    return (
+        <div>
+            <h1>Usuarios</h1>
+            <UserTable users={users} />
+        </div>
+    );
 }
