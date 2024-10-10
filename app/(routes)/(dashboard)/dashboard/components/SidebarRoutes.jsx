@@ -2,6 +2,7 @@
 
 import {dataSlidebarRoutes} from "@/app/(routes)/(dashboard)/dashboard/components/SidebarRoutes.data";
 import SidebarItem from "@/app/(routes)/(dashboard)/dashboard/components/SidebarItem";
+import {Badge} from "@/components/ui/badge";
 
 const SidebarRoutes = () => {
     const renderItemsForSection = (section) => {
@@ -29,9 +30,10 @@ const SidebarRoutes = () => {
 
 
             </div>
-            <div className="p-2 md:p-6  text-black">
+            <div className="p-2 md:p-6  text-black text-center">
 
                 <p className="mb-2 text-slate-500 text-xs font-semibold uppercase text-center">UABC 2024 COPYRIGHT</p>
+                <Badge color="primary" className="text-center bg-green-600">v1.0.0</Badge>
 
 
             </div>
