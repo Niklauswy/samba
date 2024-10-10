@@ -348,7 +348,7 @@ export default function UserTable() {
         <div className="flex items-center space-x-2">
           <span>Filas por página</span>
           <select className="border rounded p-1" value={rowsPerPage} onChange={(e) => setRowsPerPage(Number(e.target.value))}>
-            <option>10</option>
+            <option>20</option>
             <option>50</option>
             <option>100</option>
           </select>
