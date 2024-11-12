@@ -17,6 +17,8 @@ import {
   ReferenceLine,
   XAxis,
   YAxis,
+  Tooltip,
+  ResponsiveContainer
 } from "recharts"
 
 import {
