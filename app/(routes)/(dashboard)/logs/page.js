@@ -1,7 +1,7 @@
 'use client';
 import React, {useEffect, useState} from 'react';
 import LogTable from '@/app/(routes)/(dashboard)/logs/components/LogTable';
-import LogFilter from '@/app/(routes)/(dashboard)/logs/components/LogFilter'; // Corregido el nombre del import
+import LogFilter from '@/app/(routes)/(dashboard)/logs/components/LogFiltrer';
 import {LogBarChart} from '@/app/(routes)/(dashboard)/logs/components/LogBarChart';
 import {parse} from 'date-fns';
 
@@ -44,8 +44,6 @@ export default function Logs() {
             logDateObj >= new Date(dateRange.from) &&
             logDateObj <= new Date(dateRange.to).setHours(23, 59, 59, 999)
         );
-
-        const dateRangeMatch = true; // Cambiado a true para probar
 
         return userMatch && ipMatch && eventMatch && dateRangeMatch;
     });
