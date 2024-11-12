@@ -64,7 +64,7 @@ export default function Settings() {
     }
   }
 
-  const handleCsvSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCsvSelect = (e) => {
     const file = e.target.files?.[0]
     if (file && file.type === "text/csv") {
       setCsvFile(file)
