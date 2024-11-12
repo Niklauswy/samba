@@ -8,6 +8,7 @@ async function getLogs() {
 
 const Page = async () => {
   const logs = await getLogs();
+  console.log('Logs from settings:', logs); // Añadido para comparar los logs
 
   return (
       <div>
