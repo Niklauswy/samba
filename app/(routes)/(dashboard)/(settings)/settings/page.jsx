@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import useSWR from 'swr'; // Importar useSWR para manejo eficiente de datos
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -28,16 +29,16 @@ export default function Settings() {
   const [csvFile, setCsvFile] = useState(null)
   const [defaultPassword, setDefaultPassword] = useState("")
   const [syslogEntries, setSyslogEntries] = useState([])
-  const [systemInfo, setSystemInfo] = useState({
-    time: "",
-    coreVersion: "",
-    software: "",
-    systemLoad: "",
-    uptime: "",
-    storage: ""
-  })
   const [syslogError, setSyslogError] = useState(null); // Nuevo estado para errores de syslog
   const [systemInfoError, setSystemInfoError] = useState(null); // Nuevo estado para errores de system info
+
+  // Fetcher para SWR
+  const fetcher = (url) => fetch(url).then(res => res.json());
+
+  // Utilizar useSWR para systemInfo con actualización cada segundo
+  const { data: systemInfo, error: systemInfoError } = useSWR('/api/systeminfo', fetcher, {
+    refreshInterval: 1000, // Actualizar cada 1 segundo
+  });
 
   useEffect(() => {
     const fetchSyslog = async () => {
@@ -57,36 +58,14 @@ export default function Settings() {
       }
     };
 
-    const fetchSystemInfo = async () => {
-      try {
-        const response = await fetch('/api/systeminfo');
-        const result = await response.json();
-        if (response.ok) {
-          setSystemInfo(result);
-          setSystemInfoError(null);
-        } else {
-          console.error(result.error);
-          setSystemInfoError(result.error);
-        }
-      } catch (error) {
-        console.error('Error fetching system info:', error);
-        setSystemInfoError('Error fetching system info');
-      }
-    };
-
-    // Realizar las solicitudes iniciales
+    // Realizar la solicitud inicial
     fetchSyslog();
-    fetchSystemInfo();
 
     // Configurar polling para syslog cada 5 segundos
     const syslogInterval = setInterval(fetchSyslog, 5000);
 
-    // Configurar polling para system info cada 60 segundos
-    const systemInfoInterval = setInterval(fetchSystemInfo, 60000);
-
     return () => {
       clearInterval(syslogInterval);
-      clearInterval(systemInfoInterval);
     };
   }, [])
 
@@ -130,14 +109,14 @@ export default function Settings() {
             <p className="text-red-500">{systemInfoError}</p>
           ) : (
             <>
-              <p><Clock className="inline w-4 h-4 mr-2" /> Time: {systemInfo.time}</p>
+              <p><Clock className="inline w-4 h-4 mr-2" /> Time: {systemInfo?.time}</p>
               <p><Home className="inline w-4 h-4 mr-2" /> Hostname: {hostname}</p>
               <p><Server className="inline w-4 h-4 mr-2" /> Domain: {domain}</p>
-              <p><AlertCircle className="inline w-4 h-4 mr-2" /> Core version: {systemInfo.coreVersion}</p>
-              <p><HardDrive className="inline w-4 h-4 mr-2" /> Software: {systemInfo.software}</p>
-              <p><AlertCircle className="inline w-4 h-4 mr-2" /> System load: {systemInfo.systemLoad}</p>
-              <p><Clock className="inline w-4 h-4 mr-2" /> Uptime: {systemInfo.uptime}</p>
-              <p><Database className="inline w-4 h-4 mr-2" /> Storage: {systemInfo.storage}</p>
+              <p><AlertCircle className="inline w-4 h-4 mr-2" /> Core version: {systemInfo?.coreVersion}</p>
+              <p><HardDrive className="inline w-4 h-4 mr-2" /> Software: {systemInfo?.software}</p>
+              <p><AlertCircle className="inline w-4 h-4 mr-2" /> System load: {systemInfo?.systemLoad}</p>
+              <p><Clock className="inline w-4 h-4 mr-2" /> Uptime: {systemInfo?.uptime}</p>
+              <p><Database className="inline w-4 h-4 mr-2" /> Storage: {systemInfo?.storage}</p>
             </>
           )}
         </CardContent>

@@ -1,4 +1,3 @@
-
 import { promises as fs } from 'fs';
 import os from 'os';
 import checkDiskSpace from 'check-disk-space'; // Asegúrate de instalar esta dependencia
@@ -14,9 +13,9 @@ export async function GET() {
         const diskSpace = await checkDiskSpace(storagePath);
 
         const systemInfo = {
-            time: new Date().toLocaleString(),
-            coreVersion: '8.0.3', // Reemplaza con una obtención dinámica si es posible
-            software: '1 component updates, 120 system updates (80 security)', // Reemplaza con una obtención dinámica si es posible
+            time: new Date().toLocaleTimeString(), // Hora actual
+            coreVersion: '8.0.3', // Actualizar dinámicamente si es posible
+            software: '1 component updates, 120 system updates (80 security)', // Actualizar dinámicamente si es posible
             systemLoad: load.map(l => l.toFixed(2)).join(', '),
             uptime: formatUptime(uptime),
             storage: `${(diskSpace.used / 1e9).toFixed(1)} GB / ${(diskSpace.size / 1e9).toFixed(1)} GB (${diskSpace.capacity}%)`
