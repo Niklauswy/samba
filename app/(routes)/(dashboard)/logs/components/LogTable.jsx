@@ -1,4 +1,3 @@
-
 'use client'
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +13,7 @@ const LogTable = ({ logs }) => {
 
     useEffect(() => {
         setCurrentLogs(logs.slice((currentPage - 1) * pageSize, currentPage * pageSize));
+        console.log('Current Logs:', logs.slice((currentPage - 1) * pageSize, currentPage * pageSize)); // Añadido para depuración
     }, [logs, currentPage]);
 
     const handlePageChange = (page) => {

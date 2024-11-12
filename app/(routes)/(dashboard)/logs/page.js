@@ -16,6 +16,7 @@ export default function Logs() {
                     cache: 'no-store',
                 });
                 const data = await res.json();
+                console.log('Fetched logs:', data); // Añadido para depuración
                 setLogs(data);
             } catch (error) {
                 console.error('Error fetching logs:', error);
@@ -46,6 +47,8 @@ export default function Logs() {
 
         return userMatch && ipMatch && eventMatch && dateRangeMatch;
     });
+
+    console.log('Filtered logs:', filteredLogs); // Añadido para verificar logs filtrados
 
     return (
         <div className="flex min-h-screen w-full flex-col">
