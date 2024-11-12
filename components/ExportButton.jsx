@@ -45,21 +45,21 @@ export default function ExportButton({ data, columns, filename = 'export' }) {
             minute: '2-digit'
         });
 
-        // Configuración inicial
+        // Información de fecha y hora (arriba a la derecha)
+        doc.setFontSize(8);
+        doc.text(`Fecha: ${fecha}`, 170, 10);
+        doc.text(`Hora: ${hora}`, 170, 15);
+
+        // Título principal
         doc.setFontSize(16);
-        doc.text('Universidad Autónoma de Baja California', 105, 20, { align: 'center' });
+        doc.text('Universidad Autónoma de Baja California', 105, 30, { align: 'center' });
         
         doc.setFontSize(14);
-        doc.text('Facultad de Ciencias', 105, 30, { align: 'center' });
-
-        // Información del reporte
-        doc.setFontSize(10);
-        doc.text(`Fecha: ${fecha}`, 15, 45);
-        doc.text(`Hora: ${hora}`, 15, 52);
+        doc.text('Facultad de Ciencias', 105, 40, { align: 'center' });
 
         // Línea separadora
         doc.setLineWidth(0.5);
-        doc.line(15, 55, 195, 55);
+        doc.line(15, 45, 195, 45);
 
         const headers = columns.map(col => col.label);
         const rows = data.map(item =>
@@ -70,7 +70,7 @@ export default function ExportButton({ data, columns, filename = 'export' }) {
         doc.autoTable({
             head: [headers],
             body: rows,
-            startY: 60,
+            startY: 55,
             styles: { 
                 fontSize: 8,
                 cellPadding: 2,
