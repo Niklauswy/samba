@@ -1,4 +1,3 @@
-
 'use client'
 import { Button } from "@/components/ui/button";
 import {
@@ -35,17 +34,57 @@ export default function ExportButton({ data, columns, filename = 'export' }) {
 
     const exportToPDF = () => {
         const doc = new jsPDF();
+        const now = new Date();
+        const fecha = now.toLocaleDateString('es-MX', { 
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+        const hora = now.toLocaleTimeString('es-MX', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        // Configuración inicial
+        doc.setFontSize(16);
+        doc.text('Universidad Autónoma de Baja California', 105, 20, { align: 'center' });
+        
+        doc.setFontSize(14);
+        doc.text('Facultad de Ciencias', 105, 30, { align: 'center' });
+
+        // Información del reporte
+        doc.setFontSize(10);
+        doc.text(`Fecha: ${fecha}`, 15, 45);
+        doc.text(`Hora: ${hora}`, 15, 52);
+
+        // Línea separadora
+        doc.setLineWidth(0.5);
+        doc.line(15, 55, 195, 55);
+
         const headers = columns.map(col => col.label);
         const rows = data.map(item =>
             columns.map(col => item[col.key] || '')
         );
 
+        // Tabla con el nuevo color corporativo UABC
         doc.autoTable({
             head: [headers],
             body: rows,
-            styles: { fontSize: 8 },
+            startY: 60,
+            styles: { 
+                fontSize: 8,
+                cellPadding: 2,
+            },
+            headStyles: { 
+                fillColor: [0, 114, 63], // Color #00723F en RGB
+                textColor: [255, 255, 255],
+                halign: 'center'
+            },
             theme: 'grid',
-            headStyles: { fillColor: [22, 160, 133] },
+            columnStyles: {
+                0: { cellWidth: 'auto' },
+                1: { cellWidth: 'auto' },
+            },
         });
 
         doc.save(`${filename}.pdf`);
