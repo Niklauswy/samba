@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
 import { 
   Dialog,
   DialogContent,
@@ -17,21 +18,23 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Users, FileSpreadsheet, HardDrive, AlertCircle, RotateCcw, Clock, Server, Info } from "lucide-react"
+import { Users, FileSpreadsheet, HardDrive, AlertCircle, RotateCcw, Clock, Server, Info, Database, Home } from "lucide-react"
 
 export default function Settings() {
   const [domain, setDomain] = useState("example.com")
+  const [hostname, setHostname] = useState("zenti")
   const [logRotation, setLogRotation] = useState(7)
   const [detailedLogging, setDetailedLogging] = useState(false)
   const [csvFile, setCsvFile] = useState(null)
+  const [defaultPassword, setDefaultPassword] = useState("")
   const [syslogEntries, setSyslogEntries] = useState([])
   const [systemInfo, setSystemInfo] = useState({
     time: "",
-    hostname: "",
     coreVersion: "",
     software: "",
     systemLoad: "",
-    uptime: ""
+    uptime: "",
+    storage: ""
   })
 
   useEffect(() => {
@@ -46,11 +49,11 @@ export default function Settings() {
     // Simulating system info updates
     setSystemInfo({
       time: "Tue Nov 12 01:59:46 AM PST 2024",
-      hostname: "zenti",
       coreVersion: "8.0.3 (8.0.4 available)",
       software: "1 component updates, 120 system updates (80 security)",
       systemLoad: "0.02, 0.33, 0.61",
-      uptime: "29 min"
+      uptime: "29 min",
+      storage: "234.5 GB / 500 GB (46.9%)"
     })
 
     return () => clearInterval(interval)
@@ -84,12 +87,34 @@ export default function Settings() {
     <div className="container mx-auto p-6 space-y-6">
       <h1 className="text-3xl font-bold mb-6">Dashboard Settings</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl flex items-center gap-2">
+            <Server className="w-5 h-5" />
+            System Information
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p><Clock className="inline w-4 h-4 mr-2" /> Time: {systemInfo.time}</p>
+          <p><Home className="inline w-4 h-4 mr-2" /> Hostname: {hostname}</p>
+          <p><Server className="inline w-4 h-4 mr-2" /> Domain: {domain}</p>
+          <p><AlertCircle className="inline w-4 h-4 mr-2" /> Core version: {systemInfo.coreVersion}</p>
+          <p><HardDrive className="inline w-4 h-4 mr-2" /> Software: {systemInfo.software}</p>
+          <p><AlertCircle className="inline w-4 h-4 mr-2" /> System load: {systemInfo.systemLoad}</p>
+          <p><Clock className="inline w-4 h-4 mr-2" /> Uptime: {systemInfo.uptime}</p>
+          <p><Database className="inline w-4 h-4 mr-2" /> Storage: {systemInfo.storage}</p>
+        </CardContent>
+      </Card>
+
+      <Separator className="my-6" />
+
+      <div className="space-y-6">
+        <h2 className="text-2xl font-semibold">User Management</h2>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="w-5 h-5" />
-              User Management
+              CSV Import
               <Dialog>
                 <DialogTrigger asChild>
                   <Button variant="ghost" size="sm" className="ml-auto">
@@ -164,56 +189,66 @@ export default function Settings() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <HardDrive className="w-5 h-5" />
-              Log Settings
+              <Users className="w-5 h-5" />
+              Default User Settings
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="log-rotation">Log Rotation (days)</Label>
-              <div className="flex items-center space-x-2">
-                <RotateCcw className="w-4 h-4 text-gray-500" />
-                <Slider
-                  id="log-rotation"
-                  min={1}
-                  max={30}
-                  step={1}
-                  value={[logRotation]}
-                  onValueChange={(value) => setLogRotation(value[0])}
+          <CardContent>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="default-password">Default Password</Label>
+                <Input
+                  id="default-password"
+                  type="password"
+                  value={defaultPassword}
+                  onChange={(e) => setDefaultPassword(e.target.value)}
+                  placeholder="Enter default password for new users"
                 />
-                <span className="w-12 text-right">{logRotation}</span>
               </div>
+              <Button>Save Default Settings</Button>
             </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="detailed-logging"
-                checked={detailedLogging}
-                onCheckedChange={setDetailedLogging}
-              />
-              <Label htmlFor="detailed-logging">Enable Detailed Logging</Label>
-            </div>
-            <Button>Save Log Settings</Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Server className="w-5 h-5" />
-              System Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <p><Clock className="inline w-4 h-4 mr-2" /> Time: {systemInfo.time}</p>
-            <p><Server className="inline w-4 h-4 mr-2" /> Hostname: {systemInfo.hostname}</p>
-            <p><AlertCircle className="inline w-4 h-4 mr-2" /> Core version: {systemInfo.coreVersion}</p>
-            <p><HardDrive className="inline w-4 h-4 mr-2" /> Software: {systemInfo.software}</p>
-            <p><AlertCircle className="inline w-4 h-4 mr-2" /> System load: {systemInfo.systemLoad}</p>
-            <p><Clock className="inline w-4 h-4 mr-2" /> Uptime: {systemInfo.uptime}</p>
-            <p><Server className="inline w-4 h-4 mr-2" /> Domain: {domain}</p>
           </CardContent>
         </Card>
       </div>
+
+      <Separator className="my-6" />
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <HardDrive className="w-5 h-5" />
+            Log Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="log-rotation">Log Rotation (days)</Label>
+            <div className="flex items-center space-x-2">
+              <RotateCcw className="w-4 h-4 text-gray-500" />
+              <Slider
+                id="log-rotation"
+                min={1}
+                max={30}
+                step={1}
+                value={[logRotation]}
+                onValueChange={(value) => setLogRotation(value[0])}
+              />
+              <span className="w-12 text-right">{logRotation}</span>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="detailed-logging"
+              checked={detailedLogging}
+              onCheckedChange={setDetailedLogging}
+            />
+            <Label htmlFor="detailed-logging">Enable Detailed Logging</Label>
+          </div>
+          <Button>Save Log Settings</Button>
+        </CardContent>
+      </Card>
+
+      <Separator className="my-6" />
 
       <Card>
         <CardHeader>
