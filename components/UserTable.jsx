@@ -29,6 +29,7 @@ import {
 import { Monitor, Database, Beaker, Leaf } from "lucide-react";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import ExportButton from '@/components/ExportButton';
 
 const careerIcons = {
     CC: <Cpu className="h-4 w-4" />,
@@ -295,26 +296,11 @@ export default function UserTable({ users }) {
                         ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="border-dashed">
-                            {/* Icono de exportación */}
-                            <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 7l-5 5m0 0l5 5m-5-5h12m-7-5v10" />
-                            </svg>
-                            Exportar
-                            <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem onSelect={exportToCSV}>
-                            Exportar como CSV
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={exportToPDF}>
-                            Exportar como PDF
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <ExportButton 
+                    data={sortedUsers}
+                    columns={columns.filter(col => col.key !== 'accion')}
+                    filename="usuarios"
+                />
             </div>
             <div className="rounded-lg shadow overflow-hidden">
                 <Table>

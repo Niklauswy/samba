@@ -3,7 +3,15 @@ import React, {useEffect, useState} from 'react';
 import LogTable from '@/app/(routes)/(dashboard)/logs/components/LogTable';
 import LogFilter from '@/app/(routes)/(dashboard)/logs/components/LogFiltrer';
 import {LogBarChart} from '@/app/(routes)/(dashboard)/logs/components/LogBarChart';
+import ExportButton from '@/components/ExportButton';
 import {parse} from 'date-fns';
+
+const logColumns = [
+    { key: "user", label: "Usuario" },
+    { key: "ip", label: "IP" },
+    { key: "event", label: "Evento" },
+    { key: "date", label: "Fecha" }
+];
 
 export default function Logs() {
     const [filters, setFilters] = useState({user: '', dateRange: '', ip: '', event: ''});
@@ -54,7 +62,14 @@ export default function Logs() {
         <div className="flex min-h-screen w-full flex-col">
             <div className="flex flex-col sm:gap-4 sm:py-4">
                 <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-                    <LogFilter logs={logs} filters={filters} setFilters={setFilters}/>
+                    <div className="flex justify-between items-center">
+                        <LogFilter logs={logs} filters={filters} setFilters={setFilters}/>
+                        <ExportButton 
+                            data={filteredLogs}
+                            columns={logColumns}
+                            filename="registros"
+                        />
+                    </div>
                     <LogTable logs={filteredLogs}/>
                     <LogBarChart logs={filteredLogs}/>
                 </main>
