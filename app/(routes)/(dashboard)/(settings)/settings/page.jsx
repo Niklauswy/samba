@@ -30,7 +30,6 @@ export default function Settings() {
   const [defaultPassword, setDefaultPassword] = useState("")
   const [syslogEntries, setSyslogEntries] = useState([])
   const [syslogError, setSyslogError] = useState(null); // Nuevo estado para errores de syslog
-  const [systemInfoError, setSystemInfoError] = useState(null); // Nuevo estado para errores de system info
 
   // Fetcher para SWR
   const fetcher = (url) => fetch(url).then(res => res.json());
