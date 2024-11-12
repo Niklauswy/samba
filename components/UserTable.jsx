@@ -151,44 +151,7 @@ export default function UserTable({ users }) {
         }
     }, []);
 
-    const exportToCSV = () => {
-        const headers = columns.filter(col => col.key !== 'accion').map(col => col.label);
-        const rows = sortedUsers.map(user =>
-            columns.filter(col => col.key !== 'accion').map(col => user[col.key] || '')
-        );
 
-        const csvContent = [
-            headers.join(','),
-            ...rows.map(row => row.map(value => `"${value}"`).join(','))
-        ].join('\n');
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'usuarios.csv');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const exportToPDF = () => {
-        const doc = new jsPDF();
-        const headers = columns.filter(col => col.key !== 'accion').map(col => col.label);
-        const rows = sortedUsers.map(user =>
-            columns.filter(col => col.key !== 'accion').map(col => user[col.key] || '')
-        );
-
-        doc.autoTable({
-            head: [headers],
-            body: rows,
-            styles: { fontSize: 8 },
-            theme: 'grid',
-            headStyles: { fillColor: [22, 160, 133] },
-        });
-
-        doc.save('usuarios.pdf');
-    };
 
     return (
         <div className="p-4 space-y-4 min-h-screen">
