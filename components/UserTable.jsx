@@ -328,10 +328,10 @@ export default function UserTable({ users }) {
                 </Table>
             </div>
             <div className="flex justify-between items-center text-sm text-gray-500">
-                <span>{selectedRows.length} de {sortedUsers.length} fila(s) seleccionada(s).</span>
+                <span>{selectedRows.length} de {sortedUsers.length} usuarios seleccionados.</span>
                 <div className="flex justify-between items-center text-sm text-gray-500">
                     <div className="flex items-center space-x-2">
-                        <span>Filas por página</span>
+                        <span>Usuarios por página</span>
                         <select
                             className="border rounded p-1"
                             value={rowsPerPage}
