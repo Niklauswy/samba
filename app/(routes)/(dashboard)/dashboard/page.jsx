@@ -1,8 +1,5 @@
 "use client"
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-
 import {
   Area,
   AreaChart,
@@ -44,18 +41,6 @@ import {Badge} from "@/components/ui/badge";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 
 export function Dashboard() {
-  const router = useRouter();
-
-  useEffect(() => {
-    async function checkAuth() {
-      const res = await fetch('/api/check-auth');
-      if (res.status !== 200) {
-        router.push('/login');
-      }
-    }
-    checkAuth();
-  }, [router]);
-
   return (
       <div
           className="chart-wrapper mx-auto flex flex-col flex-wrap items-start justify-center gap-6 p-6 sm:flex-row sm:p-8">
