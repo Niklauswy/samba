@@ -12,7 +12,7 @@ export default function Logs() {
     useEffect(() => {
         async function fetchLogs() {
             try {
-                const res = await fetch('http://localhost:5000/api/logs', {
+                const res = await fetch('/api/logs', { // Cambiado a ruta relativa
                     cache: 'no-store',
                 });
                 const data = await res.json();

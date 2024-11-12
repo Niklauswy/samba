@@ -1,3 +1,5 @@
+import { Settings } from "lucide-react";
+
 async function getLogs() {
   const res = await fetch("http://localhost:5000/api/logs", { // Verificar que la URL es correcta
     cache: 'no-store'
@@ -6,7 +8,7 @@ async function getLogs() {
   return data;
 }
 
-const Page = async () => {
+const SettingsPage = async () => {
   const logs = await getLogs();
 
   return (
@@ -20,4 +22,4 @@ const Page = async () => {
   );
 }
 
-export default Page;
+export default SettingsPage;
