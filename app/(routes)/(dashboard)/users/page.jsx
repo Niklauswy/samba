@@ -3,19 +3,12 @@
 import { useEffect, useState } from 'react';
 import UserTable from '@/components/UserTable';
 import UserTableSkeleton from '@/components/UserTableSkeleton';
-import { useRouter } from 'next/navigation';
 
 export default function UsersPage() {
     const [users, setUsers] = useState(null);
-    const router = useRouter();
 
     useEffect(() => {
         async function fetchUsersData() {
-            const res = await fetch('/api/check-auth');
-            if (res.status !== 200) {
-                router.push('/login');
-                return;
-            }
             try {
                 const res = await fetch('/api/users');
                 const data = await res.json();
@@ -25,7 +18,7 @@ export default function UsersPage() {
             }
         }
         fetchUsersData();
-    }, [router]);
+    }, []);
 
     if (!users) {
         return <UserTableSkeleton />; 
