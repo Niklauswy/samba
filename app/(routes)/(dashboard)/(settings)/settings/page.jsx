@@ -23,8 +23,8 @@ export default function Settings() {
   const [domain, setDomain] = useState("example.com")
   const [logRotation, setLogRotation] = useState(7)
   const [detailedLogging, setDetailedLogging] = useState(false)
-  const [csvFile, setCsvFile] = useState<File | null>(null)
-  const [syslogEntries, setSyslogEntries] = useState<string[]>([])
+  const [csvFile, setCsvFile] = useState(null)
+  const [syslogEntries, setSyslogEntries] = useState([])
   const [systemInfo, setSystemInfo] = useState({
     time: "",
     hostname: "",
@@ -232,4 +232,4 @@ export default function Settings() {
       </Card>
     </div>
   )
-} 
+}
