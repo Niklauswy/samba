@@ -4,9 +4,9 @@ import path from 'path';
 
 export async function GET() {
     try {
-        const syslogPath = '/var/log/syslog'; // Adjust the path if necessary
+        const syslogPath = '/var/log/syslog'; 
         const data = await fs.readFile(syslogPath, 'utf-8');
-        const lines = data.split('\n').slice(-100); // Get the last 100 lines
+        const lines = data.split('\n').slice(-100); // Usar solo las últimas 100 líneas
         return new Response(JSON.stringify({ syslog: lines }), {
             headers: { 'Content-Type': 'application/json' },
         });

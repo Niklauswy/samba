@@ -36,6 +36,8 @@ export default function Settings() {
     uptime: "",
     storage: ""
   })
+  const [syslogError, setSyslogError] = useState(null); // Nuevo estado para errores de syslog
+  const [systemInfoError, setSystemInfoError] = useState(null); // Nuevo estado para errores de system info
 
   useEffect(() => {
     const fetchSyslog = async () => {
@@ -44,21 +46,48 @@ export default function Settings() {
         const result = await response.json();
         if (response.ok) {
           setSyslogEntries(result.syslog);
+          setSyslogError(null); // Resetear error si la solicitud es exitosa
         } else {
           console.error(result.error);
+          setSyslogError(result.error); // Establecer mensaje de error
         }
       } catch (error) {
         console.error('Error fetching syslog:', error);
+        setSyslogError('Error fetching syslog'); // Establecer mensaje de error
       }
     };
 
-    // Initial fetch
+    const fetchSystemInfo = async () => {
+      try {
+        const response = await fetch('/api/systeminfo');
+        const result = await response.json();
+        if (response.ok) {
+          setSystemInfo(result);
+          setSystemInfoError(null);
+        } else {
+          console.error(result.error);
+          setSystemInfoError(result.error);
+        }
+      } catch (error) {
+        console.error('Error fetching system info:', error);
+        setSystemInfoError('Error fetching system info');
+      }
+    };
+
+    // Realizar las solicitudes iniciales
     fetchSyslog();
+    fetchSystemInfo();
 
-    // Polling every 5 seconds
-    const interval = setInterval(fetchSyslog, 5000);
+    // Configurar polling para syslog cada 5 segundos
+    const syslogInterval = setInterval(fetchSyslog, 5000);
 
-    return () => clearInterval(interval);
+    // Configurar polling para system info cada 60 segundos
+    const systemInfoInterval = setInterval(fetchSystemInfo, 60000);
+
+    return () => {
+      clearInterval(syslogInterval);
+      clearInterval(systemInfoInterval);
+    };
   }, [])
 
   const handleCsvDrop = (e) => {
@@ -97,14 +126,20 @@ export default function Settings() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          <p><Clock className="inline w-4 h-4 mr-2" /> Time: {systemInfo.time}</p>
-          <p><Home className="inline w-4 h-4 mr-2" /> Hostname: {hostname}</p>
-          <p><Server className="inline w-4 h-4 mr-2" /> Domain: {domain}</p>
-          <p><AlertCircle className="inline w-4 h-4 mr-2" /> Core version: {systemInfo.coreVersion}</p>
-          <p><HardDrive className="inline w-4 h-4 mr-2" /> Software: {systemInfo.software}</p>
-          <p><AlertCircle className="inline w-4 h-4 mr-2" /> System load: {systemInfo.systemLoad}</p>
-          <p><Clock className="inline w-4 h-4 mr-2" /> Uptime: {systemInfo.uptime}</p>
-          <p><Database className="inline w-4 h-4 mr-2" /> Storage: {systemInfo.storage}</p>
+          {systemInfoError ? (
+            <p className="text-red-500">{systemInfoError}</p>
+          ) : (
+            <>
+              <p><Clock className="inline w-4 h-4 mr-2" /> Time: {systemInfo.time}</p>
+              <p><Home className="inline w-4 h-4 mr-2" /> Hostname: {hostname}</p>
+              <p><Server className="inline w-4 h-4 mr-2" /> Domain: {domain}</p>
+              <p><AlertCircle className="inline w-4 h-4 mr-2" /> Core version: {systemInfo.coreVersion}</p>
+              <p><HardDrive className="inline w-4 h-4 mr-2" /> Software: {systemInfo.software}</p>
+              <p><AlertCircle className="inline w-4 h-4 mr-2" /> System load: {systemInfo.systemLoad}</p>
+              <p><Clock className="inline w-4 h-4 mr-2" /> Uptime: {systemInfo.uptime}</p>
+              <p><Database className="inline w-4 h-4 mr-2" /> Storage: {systemInfo.storage}</p>
+            </>
+          )}
         </CardContent>
       </Card>
 
@@ -260,11 +295,15 @@ export default function Settings() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[200px] w-full rounded-md border p-4">
-            {syslogEntries.map((entry, index) => (
-              <p key={index} className="text-sm">{entry}</p>
-            ))}
-          </ScrollArea>
+          {syslogError ? (
+            <p className="text-red-500">{syslogError}</p>
+          ) : (
+            <ScrollArea className="h-[200px] w-full rounded-md border p-4">
+              {syslogEntries.map((entry, index) => (
+                <p key={index} className="text-sm">{entry}</p>
+              ))}
+            </ScrollArea>
+          )}
         </CardContent>
       </Card>
     </div>
