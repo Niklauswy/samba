@@ -27,7 +27,6 @@ import {
     Microscope,
 } from "lucide-react";
 import { Monitor, Database, Beaker, Leaf } from "lucide-react";
-import { fetchUsers } from "@/app/API/data";
 
 const careerIcons = {
     CC: <Cpu className="h-4 w-4" />,
