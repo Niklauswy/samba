@@ -58,7 +58,7 @@ export default function UserTable({ users }) {
     const [sortColumn, setSortColumn] = useState(null);
     const [sortDirection, setSortDirection] = useState("asc");
 
-
+    // Verificar que no hay dependencias que requieran datos antes de estar disponibles.
     const allCarreras = useMemo(() => [...new Set(users.map((user) => user.ou).filter((ou) => ou))], [users]);
     const allGroups = useMemo(() => [...new Set(users.map((user) => user.group))], [users]);
 

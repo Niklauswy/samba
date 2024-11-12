@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import UserTable from '@/components/UserTable';
+import UserTableSkeleton from '@/components/UserTableSkeleton';
 
 export default function UsersPage() {
     const [users, setUsers] = useState(null);
@@ -9,7 +10,7 @@ export default function UsersPage() {
     useEffect(() => {
         async function fetchUsersData() {
             try {
-                const res = await fetch('/api/users'); // Cambiado a ruta relativa
+                const res = await fetch('/api/users');
                 const data = await res.json();
                 setUsers(data);
             } catch (error) {
@@ -20,7 +21,7 @@ export default function UsersPage() {
     }, []);
 
     if (!users) {
-        return <div>Cargando...</div>; // Mensaje en español
+        return <UserTableSkeleton />; // Mostrar el skeleton en lugar de 'Cargando...'
     }
 
     return (
