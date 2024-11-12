@@ -1,17 +1,9 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
+
+'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import Nav from './components/Nav';
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Dashboard Access",
-  description: "Dashboard para la g",
-};
-
-export default function RootLayout({ children }) {
+export default function Nav() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -30,11 +22,12 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Nav />
-        {children}
-      </body>
-    </html>
+    <nav>
+      {isAuthenticated ? (
+        <button onClick={handleLogout}>Logout</button>
+      ) : (
+        <Link href="/login">Login</Link>
+      )}
+    </nav>
   );
 }
