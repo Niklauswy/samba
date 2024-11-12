@@ -53,6 +53,7 @@ export default function ExportButton({ data, columns, filename = 'export' }) {
         doc.setFontSize(10);
         doc.text(`Fecha: ${fecha}`, 15, 45);
         doc.text(`Hora: ${hora}`, 170, 45);
+        doc.text(`Total de registros: ${data.length}`, 15, 52); 
 
         doc.setLineWidth(0.5);
         doc.line(15, 55, 195, 55);
