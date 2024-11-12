@@ -18,7 +18,7 @@ export default function UsersPage() {
     }, []);
 
     if (!users) {
-        return <div>Loading...</div>;
+        return <div>Cargando...</div>;
     }
 
     return (
