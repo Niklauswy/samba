@@ -1,6 +1,8 @@
+'use client';
 import { Inter } from "next/font/google";
 import "./globals.css";
-import ClientLayout from './ClientLayout'; // Import the new ClientLayout component
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,12 +12,34 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    async function checkAuth() {
+      const res = await fetch('/api/check-auth');
+      if (res.ok) {
+        setIsAuthenticated(true);
+      }
+    }
+    checkAuth();
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    setIsAuthenticated(false);
+  };
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
+        <nav>
+          {isAuthenticated ? (
+            <button onClick={handleLogout}>Logout</button>
+          ) : (
+            <Link href="/login">Login</Link>
+          )}
+        </nav>
+        {children}
       </body>
     </html>
   );
