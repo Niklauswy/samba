@@ -21,12 +21,11 @@ export default function UsersPage() {
     }, []);
 
     if (!users) {
-        return <UserTableSkeleton />; // Mostrar el skeleton en lugar de 'Cargando...'
+        return <UserTableSkeleton />; 
     }
 
     return (
         <div>
-            <h1>Usuarios</h1>
             <UserTable users={users} />
         </div>
     );
