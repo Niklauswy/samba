@@ -45,19 +45,15 @@ export default function ExportButton({ data, columns, filename = 'export' }) {
             minute: '2-digit'
         });
 
-        // Configuración inicial
+        // Info de la cabecera
         doc.setFontSize(16);
-        doc.text('Universidad Autónoma de Baja California', 105, 20, { align: 'center' });
-        
+        doc.text('Universidad Autónoma de Baja California', 105, 20, { align: 'center' });        
         doc.setFontSize(14);
         doc.text('Facultad de Ciencias', 105, 30, { align: 'center' });
-
-        // Información del reporte
         doc.setFontSize(10);
         doc.text(`Fecha: ${fecha}`, 15, 45);
         doc.text(`Hora: ${hora}`, 170, 45);
 
-        // Línea separadora
         doc.setLineWidth(0.5);
         doc.line(15, 55, 195, 55);
 
@@ -66,7 +62,7 @@ export default function ExportButton({ data, columns, filename = 'export' }) {
             columns.map(col => item[col.key] || '')
         );
 
-        // Tabla con el nuevo color corporativo UABC
+     
         doc.autoTable({
             head: [headers],
             body: rows,
