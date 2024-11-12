@@ -27,6 +27,8 @@ import {
     Microscope,
 } from "lucide-react";
 import { Monitor, Database, Beaker, Leaf } from "lucide-react";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const careerIcons = {
     CC: <Cpu className="h-4 w-4" />,
@@ -148,6 +150,45 @@ export default function UserTable({ users }) {
         }
     }, []);
 
+    const exportToCSV = () => {
+        const headers = columns.filter(col => col.key !== 'accion').map(col => col.label);
+        const rows = sortedUsers.map(user =>
+            columns.filter(col => col.key !== 'accion').map(col => user[col.key] || '')
+        );
+
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.map(value => `"${value}"`).join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'usuarios.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const exportToPDF = () => {
+        const doc = new jsPDF();
+        const headers = columns.filter(col => col.key !== 'accion').map(col => col.label);
+        const rows = sortedUsers.map(user =>
+            columns.filter(col => col.key !== 'accion').map(col => user[col.key] || '')
+        );
+
+        doc.autoTable({
+            head: [headers],
+            body: rows,
+            styles: { fontSize: 8 },
+            theme: 'grid',
+            headStyles: { fillColor: [22, 160, 133] },
+        });
+
+        doc.save('usuarios.pdf');
+    };
+
     return (
         <div className="p-4 space-y-4 min-h-screen">
             <div className="flex items-center justify-between space-x-4">
@@ -252,6 +293,26 @@ export default function UserTable({ users }) {
                                 {column.label}
                             </DropdownMenuItem>
                         ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="border-dashed">
+                            {/* Icono de exportación */}
+                            <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 7l-5 5m0 0l5 5m-5-5h12m-7-5v10" />
+                            </svg>
+                            Exportar
+                            <ChevronDown className="ml-2 h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem onSelect={exportToCSV}>
+                            Exportar como CSV
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={exportToPDF}>
+                            Exportar como PDF
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
