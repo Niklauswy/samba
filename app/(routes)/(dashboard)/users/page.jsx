@@ -18,13 +18,13 @@ export default function UsersPage() {
     }, []);
 
     if (!users) {
-        return <div>Cargando...</div>;
+        return <div>Loading...</div>;
     }
 
     return (
         <div>
-            <h1>Usuarios</h1>
-            <UserTable users={users} />
+<h1>Usuarios</h1>
+<UserTable users={users} />
         </div>
     );
 }
