@@ -39,8 +39,64 @@ import {ArrowUpRight} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Badge} from "@/components/ui/badge";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import { useState, useEffect } from 'react';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export function Dashboard() {
+  const [topUsersData, setTopUsersData] = useState([]);
+  const [recentLoginsData, setRecentLoginsData] = useState([]);
+  const [dataError, setDataError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Obtener datos de logs
+        const logsResponse = await fetch('/api/logs');
+        const logsData = await logsResponse.json();
+
+        // Procesar datos para el gráfico de top usuarios
+        const userLogCounts = {}; // { user: logCount }
+        logsData.forEach(log => {
+          const username = log.user;
+          if (userLogCounts[username]) {
+            userLogCounts[username]++;
+          } else {
+            userLogCounts[username] = 1;
+          }
+        });
+
+        const topUsers = Object.entries(userLogCounts)
+          .map(([username, logCount]) => ({ username, logCount }))
+          .sort((a, b) => b.logCount - a.logCount)
+          .slice(0, 10);
+
+        setTopUsersData(topUsers);
+
+        // Procesar datos para el gráfico de últimos logins
+        const recentLogins = logsData
+          .filter(log => log.event === 'connect') // Filtrar eventos de conexión
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, 20) // Ajusta el número según tus preferencias
+          .map(log => ({
+            date: new Date(log.date).toLocaleString(),
+            user: log.user,
+          }));
+
+        setRecentLoginsData(recentLogins);
+        setDataError(null);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setDataError('Error fetching data');
+      }
+    };
+
+    fetchData();
+
+    const interval = setInterval(fetchData, 60000); // Actualizar cada 60 segundos
+    return () => clearInterval(interval);
+  }, []);
+
   return (
       <div
           className="chart-wrapper mx-auto flex flex-col flex-wrap items-start justify-center gap-6 p-6 sm:flex-row sm:p-8">
@@ -1107,7 +1163,57 @@ Normal dashboard
             </CardContent>
           </Card>
         </div>
+        {dataError && <p className="text-red-500">{dataError}</p>}
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Gráfico de Top Usuarios */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                {/* Icono */}
+                Top 10 Usuarios con Más Logs
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {topUsersData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={topUsersData}>
+                      <XAxis dataKey="username" tick={{ fontSize: 12 }} />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="logCount" fill="#00723F" /> {/* Color UABC */}
+                    </BarChart>
+                  </ResponsiveContainer>
+              ) : (
+                  <p>Cargando...</p>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Gráfico de Últimos Logins */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                {/* Icono */}
+                Últimos Logins
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {recentLoginsData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={recentLoginsData}>
+                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                      <YAxis />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="user" stroke="#00723F" />
+                    </LineChart>
+                  </ResponsiveContainer>
+              ) : (
+                  <p>Cargando...</p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
   )

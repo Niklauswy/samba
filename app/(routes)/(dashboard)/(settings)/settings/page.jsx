@@ -243,7 +243,7 @@ export default function Settings() {
               <Slider
                 id="log-rotation"
                 min={1}
-                max={30}
+                max={120}
                 step={1}
                 value={[logRotation]}
                 onValueChange={(value) => setLogRotation(value[0])}
