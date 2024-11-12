@@ -56,7 +56,7 @@ export default function Settings() {
     return () => clearInterval(interval)
   }, [])
 
-  const handleCsvDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleCsvDrop = (e) => {
     e.preventDefault()
     const file = e.dataTransfer.files[0]
     if (file && file.type === "text/csv") {
