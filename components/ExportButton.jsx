@@ -73,7 +73,7 @@ export default function ExportButton({ data, columns, filename = 'export' }) {
                 cellPadding: 2,
             },
             headStyles: { 
-                fillColor: [0, 114, 63], // Color #00723F en RGB
+                fillColor: [0, 114, 63], // Color #00723F iel manual de identidad de la UABC
                 textColor: [255, 255, 255],
                 halign: 'center'
             },

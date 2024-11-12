@@ -38,25 +38,27 @@ export default function Settings() {
   })
 
   useEffect(() => {
-    // Simulating syslog entries
-    const interval = setInterval(() => {
-      setSyslogEntries(prev => [
-        `[${new Date().toISOString()}] New log entry ${Math.random().toString(36).substring(7)}`,
-        ...prev.slice(0, 99)
-      ])
-    }, 5000)
+    const fetchSyslog = async () => {
+      try {
+        const response = await fetch('/api/syslog');
+        const result = await response.json();
+        if (response.ok) {
+          setSyslogEntries(result.syslog);
+        } else {
+          console.error(result.error);
+        }
+      } catch (error) {
+        console.error('Error fetching syslog:', error);
+      }
+    };
 
-    // Simulating system info updates
-    setSystemInfo({
-      time: "Tue Nov 12 01:59:46 AM PST 2024",
-      coreVersion: "8.0.3 (8.0.4 available)",
-      software: "1 component updates, 120 system updates (80 security)",
-      systemLoad: "0.02, 0.33, 0.61",
-      uptime: "29 min",
-      storage: "234.5 GB / 500 GB (46.9%)"
-    })
+    // Initial fetch
+    fetchSyslog();
 
-    return () => clearInterval(interval)
+    // Polling every 5 seconds
+    const interval = setInterval(fetchSyslog, 5000);
+
+    return () => clearInterval(interval);
   }, [])
 
   const handleCsvDrop = (e) => {
