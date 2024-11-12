@@ -40,8 +40,6 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {Badge} from "@/components/ui/badge";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import { useState, useEffect } from 'react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export function Dashboard() {
   const [topUsersData, setTopUsersData] = useState([]);
