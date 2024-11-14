@@ -47,6 +47,7 @@ const columns = [
     { key: "ou", label: "Carrera" },
     { key: "logonCount", label: "Total Logs", sortable: true },
     { key: "lastLogon", label: "Último Inicio", sortable: true },
+    { key: "groups", label: "Grupos" }, // Added column
     { key: "accion", label: "", fixed: true },
 ];
 
@@ -63,13 +64,16 @@ export default function UserTable({ users }) {
 
 
     const allCarreras = useMemo(() => [...new Set(users.map((user) => user.ou).filter((ou) => ou))], [users]);
-    const allGroups = useMemo(() => [...new Set(users.map((user) => user.group))], [users]);
+    const allGroups = useMemo(() => {
+        const groups = users.flatMap(user => user.groups);
+        return [...new Set(groups)];
+    }, [users]);
 
     const filteredUsers = useMemo(() => {
         return users.filter(
             (user) =>
                 (selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)) &&
-                (selectedGroups.length === 0 || selectedGroups.includes(user.group)) &&
+                (selectedGroups.length === 0 || user.groups.some(group => selectedGroups.includes(group))) &&
                 Object.values(user).some((value) => value && value.toString().toLowerCase().includes(filter.toLowerCase()))
         );
     }, [filter, selectedCarreras, selectedGroups, users]);
@@ -143,9 +147,6 @@ export default function UserTable({ users }) {
                 break;
             case "delete":
                 console.log(`Eliminar usuario ${userId}`);
-                break;
-            case "addLabel":
-                console.log(`Añadir Label al usuario ${userId}`);
                 break;
             default:
                 break;
@@ -221,7 +222,7 @@ export default function UserTable({ users }) {
                                         </div>
                                         <div className="flex items-center">
                                             <Badge variant="secondary" className="mr-2">
-                                                {users.filter((u) => u.group === group).length}
+                                                {users.filter((u) => u.groups.includes(group)).length}
                                             </Badge>
                                             <Checkbox checked={selectedGroups.includes(group)} />
                                         </div>
@@ -318,6 +319,12 @@ export default function UserTable({ users }) {
                                                     <DropdownMenuItem onSelect={() => handleAction("addLabel", user.username)}>Añadir Label</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
+                                        ) : column.key === "groups" ? (
+                                            user.groups.map((group) => (
+                                                <Badge key={group} variant="secondary" className="mr-1">
+                                                    {group}
+                                                </Badge>
+                                            ))
                                         ) : (
                                             user[column.key]
                                         )}
