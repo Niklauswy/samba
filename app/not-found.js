@@ -30,23 +30,20 @@ const ScientificBackground = () => {
   )
 }
 
-const AnimatedFrownIcon = () => (
-  <motion.div
-    animate={{
-      rotate: [0, -10, 10, -10, 0],
-      y: [0, -5, 5, -5, 0]
-    }}
-    transition={{
-      duration: 2,
-      repeat: Infinity,
-      repeatType: "loop",
-      ease: "easeInOut"
-    }}
-    className="z-20" // Added z-index to ensure visibility
-  >
-    <FrownIcon className="w-32 h-32 text-red-500" /> {/* Changed color for better visibility */}
-  </motion.div>
-)
+// Redefine AnimatedFrownIcon using motion component directly
+const AnimatedFrownIcon = motion(FrownIcon, {
+  animate: {
+    rotate: [0, -10, 10, -10, 0],
+    y: [0, -5, 5, -5, 0]
+  },
+  transition: {
+    duration: 2,
+    repeat: Infinity,
+    repeatType: "loop",
+    ease: "easeInOut"
+  },
+  className: "w-32 h-32 text-red-500 z-20" // Ensure proper styling and visibility
+})
 
 export default function NotFound() {
   return (
