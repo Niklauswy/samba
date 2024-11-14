@@ -1,13 +1,13 @@
 'use client'
 
-import { FrownIcon, HomeIcon, RotateCcwIcon, Binary, Atom, Database, Dna, PiSquare, Microscope, Beaker, ChartBar, Cpu, Infinity } from 'lucide-react'
+import { FrownIcon, HomeIcon, RotateCcwIcon, Binary, Atom, Database, Dna, PiSquare, Microscope, Beaker, Cpu, Infinity } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 const ScientificBackground = () => {
-  const icons = [Binary, Atom, Database, Dna, PiSquare, Microscope, Beaker, ChartBar, Cpu, Infinity]
+  const icons = [Binary, Atom, Database, Dna, PiSquare, Microscope, Beaker, Cpu, Infinity]
   return (
     <div className="fixed inset-0 overflow-hidden opacity-5">
       {Array.from({ length: 50 }).map((_, index) => {
@@ -30,7 +30,7 @@ const ScientificBackground = () => {
   )
 }
 
-export default function ScientificIconsErrorPage() {
+export default function NotFound() {
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-secondary/20 overflow-hidden">
       <ScientificBackground />
@@ -71,7 +71,7 @@ export default function ScientificIconsErrorPage() {
             <Button asChild className="flex items-center gap-2">
               <Link href="/">
                 <HomeIcon className="w-4 h-4" />
-                Volver al laboratorioa
+                Volver al laboratorio
               </Link>
             </Button>
           </CardFooter>
