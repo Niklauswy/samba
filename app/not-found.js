@@ -9,7 +9,7 @@ const ScientificBackground = () => {
   const icons = [Binary, Atom, Database, Dna, PiSquare, Microscope, Beaker, Cpu, Infinity]
   return (
     <div className="fixed inset-0 overflow-hidden opacity-10">
-      {Array.from({ length: 50 }).map((_, index) => {
+      {Array.from({ length: 100 }).map((_, index) => {
         const Icon = icons[index % icons.length]
         return (
           <Icon
@@ -18,7 +18,6 @@ const ScientificBackground = () => {
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 4 + 3}rem`,
               transform: `rotate(${Math.random() * 360}deg)`,
             }}
             aria-hidden="true"
