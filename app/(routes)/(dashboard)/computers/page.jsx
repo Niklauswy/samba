@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { Terminal, Apple, HelpCircle } from "lucide-react"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
+import { Progress } from "@/components/ui/progress"
 
 // Elimina importaciones innecesarias
 // import { TooltipPortal } from '@radix-ui/react-tooltip'
@@ -87,76 +88,87 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
   }
 
   return (
-    <TooltipProvider>
-      <div className="p-6 bg-gray-100 min-h-screen">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Computadoras por Salón</h1>
-        <Accordion type="single" collapsible>
-          {classrooms.map((classroom) => (
-            <AccordionItem key={classroom.id} value={`classroom-${classroom.id}`}>
-              <AccordionTrigger className="flex justify-between items-center px-4 py-2 bg-white shadow-md">
-                <span className="text-xl font-semibold flex items-center">
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Monitoreo de Estados por Salón</h1>
+      <div className="space-y-6">
+        {classrooms.map((classroom) => {
+          const totalComputers = classroom.computers.length
+          const activeComputers = classroom.computers.filter(c => c.status === 'activo').length
+          const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(0)
+
+          return (
+            <Card key={classroom.id} className="relative">
+              <CardHeader className="flex justify-between items-center p-4">
+                <CardTitle className="text-xl font-semibold flex items-center">
                   <School className="mr-2 h-5 w-5" />
                   {classroom.name}
-                </span>
-                <ChevronDown className="h-5 w-5" />
-              </AccordionTrigger>
-              <AccordionContent className="p-4 bg-white shadow-md">
-                <div className="mb-4 flex justify-between items-center">
-                  <p className="text-lg font-semibold text-gray-700">
-                    Total de computadoras: {classroom.computers.length}
-                  </p>
-                  <Badge variant="secondary" className="text-sm">
-                    {classroom.computers.filter(c => c.status === 'activo').length} activas
-                  </Badge>
+                </CardTitle>
+                <div className="text-sm font-medium text-gray-600">
+                  {activePercentage}% Activas
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-4">
-                  {(expandedClassrooms[classroom.id] ? classroom.computers : classroom.computers.slice(0,10)).map((computer) => (
-                    <Dialog key={computer.id}>
-                      <Tooltip>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="flex space-x-1">
+                  {classroom.computers.map((computer) => {
+                    const statusColor = {
+                      'activo': 'bg-green-500',
+                      'mantenimiento': 'bg-red-500',
+                      'desconocido': 'bg-gray-500'
+                    }[computer.status]
+
+                    return (
+                      <Tooltip key={computer.id}>
                         <TooltipTrigger asChild>
-                          <DialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className={`w-full h-24 flex flex-col items-center justify-center p-2 rounded-md ${statusColors[computer.status]} bg-opacity-20`}
-                              onClick={() => setSelectedComputer(computer)}
-                            >
-                              {osIcons[computer.os] || osIcons.unknown}
-                              <span className="mt-2 text-xs font-medium text-gray-700">{computer.name}</span>
-                            </Button>
-                          </DialogTrigger>
+                          <Button
+                            variant="ghost"
+                            className={`w-full h-4 ${statusColor} flex-1`}
+                            onClick={() => setSelectedComputer(computer)}
+                          />
                         </TooltipTrigger>
                         <TooltipContent>
-                          {computer.os}
+                          <p><strong>Nombre:</strong> {computer.name}</p>
+                          <p><strong>Estado:</strong> {statusNames[computer.status]}</p>
+                          <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
                         </TooltipContent>
                       </Tooltip>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle className="flex items-center">
-                            <Info className="mr-2 h-5 w-5 text-blue-500" />
-                            Información de {computer.name}
-                          </DialogTitle>
-                        </DialogHeader>
-                        <div className="mt-4 space-y-3">
-                          <p><strong>Estado:</strong> {statusNames[computer.status]}</p>
-                          <p><strong>Sistema Operativo:</strong> {computer.os}</p>
-                          <p><strong>Dirección IP:</strong> {computer.ip}</p>
-                          <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
-                          <p><strong>Cantidad de inicios:</strong> {computer.loginCount}</p>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  ))}
+                    )
+                  })}
                 </div>
-                {classroom.computers.length > 10 && (
-                  <Button variant="link" onClick={() => toggleExpand(classroom.id)} className="mt-4">
-                    {expandedClassrooms[classroom.id] ? 'Ver menos' : 'Ver más'}
-                  </Button>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+                <div className="mt-4 flex space-x-4">
+                  <Badge variant="secondary" className="flex items-center">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div> Activo
+                  </Badge>
+                  <Badge variant="secondary" className="flex items-center">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div> Mantenimiento
+                  </Badge>
+                  <Badge variant="secondary" className="flex items-center">
+                    <div className="w-2 h-2 bg-gray-500 rounded-full mr-2"></div> Desconocido
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })}
+        {selectedComputer && (
+          <Dialog open={!!selectedComputer} onOpenChange={() => setSelectedComputer(null)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="flex items-center">
+                  <Info className="mr-2 h-5 w-5 text-blue-500" />
+                  Información de {selectedComputer.name}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="mt-4 space-y-3">
+                <p><strong>Estado:</strong> {statusNames[selectedComputer.status]}</p>
+                <p><strong>Sistema Operativo:</strong> {selectedComputer.os}</p>
+                <p><strong>Dirección IP:</strong> {selectedComputer.ip}</p>
+                <p><strong>Último inicio de sesión:</strong> {selectedComputer.lastLogin}</p>
+                <p><strong>Cantidad de inicios:</strong> {selectedComputer.loginCount}</p>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
-    </TooltipProvider>
+    </div>
   )
 }
