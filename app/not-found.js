@@ -71,7 +71,7 @@ export default function ScientificIconsErrorPage() {
             <Button asChild className="flex items-center gap-2">
               <Link href="/">
                 <HomeIcon className="w-4 h-4" />
-                Volver al laboratorio
+                Volver al laboratorioa
               </Link>
             </Button>
           </CardFooter>
