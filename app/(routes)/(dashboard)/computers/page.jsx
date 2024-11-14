@@ -26,6 +26,9 @@ const exampleClassrooms = [
   {
     id: '1',
     name: 'Salón 101',
+    statusHistory: Array.from({ length: 90 }, () => 
+      ['activo', 'mantenimiento', 'desconocido'][Math.floor(Math.random() * 3)]
+    ),
     computers: Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 1}`,
       name: `PC-101-${i + 1}`,
@@ -39,6 +42,9 @@ const exampleClassrooms = [
   {
     id: '2',
     name: 'Salón 102',
+    statusHistory: Array.from({ length: 90 }, () => 
+      ['activo', 'mantenimiento', 'desconocido'][Math.floor(Math.random() * 3)]
+    ),
     computers: Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 21}`,
       name: `PC-102-${i + 1}`,
@@ -136,6 +142,24 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                   </div>
                 </CardHeader>
                 <CardContent className="p-6">
+                  {/* Add Status History Tracker */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-700">Estado Histórico</span>
+                      <span className="text-xs text-gray-500">Última actualización: {classroom.statusHistory.length} días atrás</span>
+                    </div>
+                    <div className="flex h-4 space-x-0.5">
+                      {classroom.statusHistory.map((status, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex-1 ${statusColors[status]} rounded`}
+                          title={`Día ${idx + 1}: ${statusNames[status]}`}
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Existing Horizontal Tracker (Optional: Remove if replaced by status history) */}
                   <div className="flex items-center space-x-2 overflow-x-auto mb-4">
                     {classroom.computers.map((computer) => (
                       <Tooltip key={computer.id}>
@@ -156,6 +180,8 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                       </Tooltip>
                     ))}
                   </div>
+                  
+                  {/* ...existing code... */}
                 </CardContent>
               </Card>
             )
