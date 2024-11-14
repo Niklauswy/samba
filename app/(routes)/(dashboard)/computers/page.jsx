@@ -97,6 +97,20 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
     <TooltipProvider>
       <div className="p-8 bg-white min-h-screen">
         <h1 className="text-4xl font-bold mb-10 text-gray-800 text-center">Monitoreo de Estados por Salón</h1>
+        <div className="flex justify-center mb-6 space-x-6">
+          <div className="flex items-center">
+            <div className="w-5 h-5 bg-green-500 rounded mr-2"></div>
+            <span className="text-gray-700">Operativo</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-5 h-5 bg-red-500 rounded mr-2"></div>
+            <span className="text-gray-700">Problemas</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-5 h-5 bg-gray-500 rounded mr-2"></div>
+            <span className="text-gray-700">Sin Datos</span>
+          </div>
+        </div>
         <div className="space-y-10">
           {classrooms.map((classroom) => {
             const totalComputers = classroom.computers.length
@@ -122,17 +136,23 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                   </div>
                 </CardHeader>
                 <CardContent className="p-6">
-                  <div className="flex space-x-2 overflow-x-auto">
+                  <div className="flex items-center space-x-2 overflow-x-auto mb-4">
                     {classroom.computers.map((computer) => (
-                      <Tooltip key={computer.id} content={`Estado: ${statusNames[computer.status]}\nÚltimo inicio de sesión: ${computer.lastLogin}`}>
-                        <div
-                          className={`w-4 h-4 rounded ${statusColors[computer.status]} flex items-center justify-center cursor-pointer`}
-                          onClick={() => setSelectedComputer(computer)}
-                        >
-                          {computer.status === 'activo' && <Check className="h-3 w-3 text-white" />}
-                          {computer.status === 'mantenimiento' && <X className="h-3 w-3 text-white" />}
-                          {computer.status === 'desconocido' && <Minus className="h-3 w-3 text-white" />}
-                        </div>
+                      <Tooltip key={computer.id}>
+                        <TooltipTrigger asChild>
+                          <div
+                            className={`w-6 h-6 rounded-lg ${statusColors[computer.status]} flex items-center justify-center cursor-pointer transition-transform transform hover:scale-110 shadow-md`}
+                            onClick={() => setSelectedComputer(computer)}
+                          >
+                            {computer.status === 'activo' && <Check className="h-4 w-4 text-white" />}
+                            {computer.status === 'mantenimiento' && <X className="h-4 w-4 text-white" />}
+                            {computer.status === 'desconocido' && <Minus className="h-4 w-4 text-white" />}
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="bg-gray-800 text-white p-2 rounded">
+                          <p><strong>Estado:</strong> {statusNames[computer.status]}</p>
+                          <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
+                        </TooltipContent>
                       </Tooltip>
                     ))}
                   </div>
