@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 const ScientificBackground = () => {
   const icons = [Binary, Atom, Database, Dna, PiSquare, Microscope, Beaker, Cpu, Infinity]
   return (
-    <div className="fixed inset-0 overflow-hidden opacity-5">
+    <div className="fixed inset-0 overflow-hidden opacity-10">
       {Array.from({ length: 50 }).map((_, index) => {
         const Icon = icons[index % icons.length]
         return (
@@ -19,7 +19,7 @@ const ScientificBackground = () => {
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 2 + 1}rem`,
+              fontSize: `${Math.random() * 4 + 3}rem`,
               transform: `rotate(${Math.random() * 360}deg)`,
             }}
             aria-hidden="true"
@@ -29,6 +29,23 @@ const ScientificBackground = () => {
     </div>
   )
 }
+
+const AnimatedFrownIcon = () => (
+  <motion.div
+    animate={{
+      rotate: [0, -10, 10, -10, 0],
+      y: [0, -5, 5, -5, 0]
+    }}
+    transition={{
+      duration: 2,
+      repeat: Infinity,
+      repeatType: "loop",
+      ease: "easeInOut"
+    }}
+  >
+    <FrownIcon className="w-32 h-32 text-muted-foreground" />
+  </motion.div>
+)
 
 export default function NotFound() {
   return (
@@ -45,13 +62,9 @@ export default function NotFound() {
             <CardTitle className="text-2xl font-bold text-center">¡Ups! Error en el Sistema</CardTitle>
           </CardHeader>
           <CardContent className="p-6">
-            <motion.div 
-              className="flex justify-center mb-6"
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            >
-              <FrownIcon className="w-32 h-32 text-muted-foreground" />
-            </motion.div>
+            <div className="flex justify-center mb-6">
+              <AnimatedFrownIcon />
+            </div>
             <p className="text-center text-muted-foreground mb-4">
               Parece que nuestros cálculos han encontrado una anomalía en el espacio-tiempo.
             </p>
