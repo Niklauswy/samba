@@ -69,14 +69,38 @@ export default function UserTable({ users }) {
         return [...new Set(groups)];
     }, [users]);
 
+    // Compute filtered users based on selected filters
     const filteredUsers = useMemo(() => {
         return users.filter(
             (user) =>
                 (selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)) &&
                 (selectedGroups.length === 0 || user.groups.some(group => selectedGroups.includes(group))) &&
-                Object.values(user).some((value) => value && value.toString().toLowerCase().includes(filter.toLowerCase()))
+                Object.values(user).some((value) =>
+                    value && value.toString().toLowerCase().includes(filter.toLowerCase())
+                )
         );
     }, [filter, selectedCarreras, selectedGroups, users]);
+
+    // Compute available Carreras based on current group filters
+    const availableCarreras = useMemo(() => {
+        const carreras = users
+            .filter((user) =>
+                selectedGroups.length === 0 || user.groups.some(group => selectedGroups.includes(group))
+            )
+            .map((user) => user.ou)
+            .filter((ou) => ou);
+        return [...new Set(carreras)];
+    }, [users, selectedGroups]);
+
+    // Compute available Groups based on current carrera filters
+    const availableGroups = useMemo(() => {
+        const groups = users
+            .filter((user) =>
+                selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)
+            )
+            .flatMap((user) => user.groups);
+        return [...new Set(groups)];
+    }, [users, selectedCarreras]);
 
     const sortedUsers = useMemo(() => {
         if (!sortColumn) return filteredUsers;
@@ -174,22 +198,32 @@ export default function UserTable({ users }) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
-                            {allCarreras.map((carrera) => (
-                                <DropdownMenuItem key={carrera} onSelect={() => toggleCarrera(carrera)}>
-                                    <div className="flex items-center justify-between w-full">
-                                        <div className="flex items-center">
-                                            {careerIcons[carrera]}
-                                            <span className="ml-2">{carrera}</span>
+                            {availableCarreras.map((carrera) => {
+                                const count = users.filter(
+                                    (user) =>
+                                        user.ou === carrera &&
+                                        (selectedGroups.length === 0 || user.groups.some(group => selectedGroups.includes(group))) &&
+                                        Object.values(user).some((value) =>
+                                            value && value.toString().toLowerCase().includes(filter.toLowerCase())
+                                        )
+                                ).length;
+                                return (
+                                    <DropdownMenuItem key={carrera} onSelect={() => toggleCarrera(carrera)}>
+                                        <div className="flex items-center justify-between w-full">
+                                            <div className="flex items-center">
+                                                {careerIcons[carrera]}
+                                                <span className="ml-2">{carrera}</span>
+                                            </div>
+                                            <div className="flex items-center">
+                                                <Badge variant="secondary" className="mr-2">
+                                                    {count}
+                                                </Badge>
+                                                <Checkbox checked={selectedCarreras.includes(carrera)} />
+                                            </div>
                                         </div>
-                                        <div className="flex items-center">
-                                            <Badge variant="secondary" className="mr-2">
-                                                {users.filter((u) => u.ou === carrera).length}
-                                            </Badge>
-                                            <Checkbox checked={selectedCarreras.includes(carrera)} />
-                                        </div>
-                                    </div>
-                                </DropdownMenuItem>
-                            ))}
+                                    </DropdownMenuItem>
+                                );
+                            })}
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={clearCarreraFilter}>
                                 <X className="mr-2 h-4 w-4" />
@@ -214,21 +248,31 @@ export default function UserTable({ users }) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
-                            {allGroups.map((group) => (
-                                <DropdownMenuItem key={group} onSelect={() => toggleGroup(group)}>
-                                    <div className="flex items-center justify-between w-full">
-                                        <div className="flex items-center">
-                                            <span className="ml-2">{group}</span>
+                            {availableGroups.map((group) => {
+                                const count = users.filter(
+                                    (user) =>
+                                        user.groups.includes(group) &&
+                                        (selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)) &&
+                                        Object.values(user).some((value) =>
+                                            value && value.toString().toLowerCase().includes(filter.toLowerCase())
+                                        )
+                                ).length;
+                                return (
+                                    <DropdownMenuItem key={group} onSelect={() => toggleGroup(group)}>
+                                        <div className="flex items-center justify-between w-full">
+                                            <div className="flex items-center">
+                                                <span className="ml-2">{group}</span>
+                                            </div>
+                                            <div className="flex items-center">
+                                                <Badge variant="secondary" className="mr-2">
+                                                    {count}
+                                                </Badge>
+                                                <Checkbox checked={selectedGroups.includes(group)} />
+                                            </div>
                                         </div>
-                                        <div className="flex items-center">
-                                            <Badge variant="secondary" className="mr-2">
-                                                {users.filter((u) => u.groups.includes(group)).length}
-                                            </Badge>
-                                            <Checkbox checked={selectedGroups.includes(group)} />
-                                        </div>
-                                    </div>
-                                </DropdownMenuItem>
-                            ))}
+                                    </DropdownMenuItem>
+                                );
+                            })}
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={clearGroupFilter}>
                                 <X className="mr-2 h-4 w-4" />
