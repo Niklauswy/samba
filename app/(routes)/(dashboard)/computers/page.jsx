@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Monitor, Laptop, Info, School } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Tooltip, TooltipProvider } from "@/components/ui/tooltip"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { Windows, Terminal, Apple, HelpCircle } from "lucide-react"
-import { TooltipPortal } from '@radix-ui/react-tooltip'
+
+// Elimina importaciones innecesarias
+// import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 const osIcons = {
   windows: <Windows className="h-6 w-6 text-blue-500" />,
@@ -74,53 +76,58 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Computadoras por Salón</h1>
-      <Tabs defaultValue="salon-1">
-        <TabsList className="mb-6">
+    <TooltipProvider>
+      <div className="p-6 bg-gray-100 min-h-screen">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Computadoras por Salón</h1>
+        <Tabs defaultValue="salon-1">
+          <TabsList className="mb-6">
+            {classrooms.map((classroom) => (
+              <TabsTrigger key={classroom.id} value={`salon-${classroom.id}`}>
+                {classroom.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
           {classrooms.map((classroom) => (
-            <TabsTrigger key={classroom.id} value={`salon-${classroom.id}`}>
-              {classroom.name}
-            </TabsTrigger>
+            <TabsContent key={classroom.id} value={`salon-${classroom.id}`}>
+              <Card className="mb-6">
+                <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+                  <CardTitle className="text-white flex items-center text-2xl">
+                    <School className="mr-2 h-6 w-6" />
+                    {classroom.name}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="mb-4 flex justify-between items-center">
+                    <p className="text-lg font-semibold text-gray-700">Total de computadoras: {classroom.computers.length}</p>
+                    <Badge variant="secondary" className="text-sm">
+                      {classroom.computers.filter(c => c.status === 'inDomain').length} en dominio
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-4">
+                    {classroom.computers.map((computer) => (
+                      <Tooltip key={computer.id}>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full h-24 flex flex-col items-center justify-center p-2"
+                            onClick={() => setSelectedComputer(computer)}
+                          >
+                            {osIcons[computer.os] || osIcons.unknown}
+                            <span className="mt-2 text-xs font-medium text-gray-700">{computer.name}</span>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {computer.os}
+                        </TooltipContent>
+                      </Tooltip>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
           ))}
-        </TabsList>
-        {classrooms.map((classroom) => (
-          <TabsContent key={classroom.id} value={`salon-${classroom.id}`}>
-            <Card className="mb-6">
-              <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
-                <CardTitle className="text-white flex items-center text-2xl">
-                  <School className="mr-2 h-6 w-6" />
-                  {classroom.name}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="mb-4 flex justify-between items-center">
-                  <p className="text-lg font-semibold text-gray-700">Total de computadoras: {classroom.computers.length}</p>
-                  <Badge variant="secondary" className="text-sm">
-                    {classroom.computers.filter(c => c.status === 'inDomain').length} en dominio
-                  </Badge>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-4">
-                  {classroom.computers.map((computer) => (
-                <TooltipProvider key={computer.id}>
-                    <Tooltip key={computer.id} content={computer.os}>
-                      <Button
-                        variant="outline"
-                        className="w-full h-24 flex flex-col items-center justify-center p-2"
-                        onClick={() => setSelectedComputer(computer)}
-                      >
-                        {osIcons[computer.os] || osIcons.unknown}
-                        <span className="mt-2 text-xs font-medium text-gray-700">{computer.name}</span>
-                      </Button>
-                    </Tooltip>
-                    </TooltipProvider>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        ))}
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    </TooltipProvider>
   )
 }
