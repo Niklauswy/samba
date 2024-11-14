@@ -54,6 +54,19 @@ const exampleClassrooms = [
       lastLogin: '2023-10-01 08:30', // Agregar 'lastLogin'
       loginCount: Math.floor(Math.random() * 100), // Agregar 'loginCount'
     })),
+  },
+  {
+    id: '3',
+    name: 'Laboratorio Principal',
+    computers: Array.from({ length: 50 }, (_, i) => ({
+      id: `${i + 41}`,
+      name: `PC-LAB-${i + 1}`,
+      status: ['activo', 'mantenimiento', 'desconocido'][i % 3],
+      os: ['windows', 'unix', 'mac', 'unknown'][i % 4],
+      ip: `192.168.3.${100 + i + 1}`,
+      lastLogin: '2023-10-01 08:30',
+      loginCount: Math.floor(Math.random() * 100),
+    })),
   }
 ]
 
@@ -139,29 +152,32 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                           <div className="w-2 h-2 bg-amber-500 rounded-full ml-2"/>
                           <span>Mantenimiento</span>
                           <div className="w-2 h-2 bg-slate-300 rounded-full ml-2"/>
-                          <span className="flex items-center">
+                          <span className="flex items-center group relative">
                             Desconocido
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <Info className="h-3 w-3 ml-1 text-slate-400" />
-                              </TooltipTrigger>
-                              <TooltipContent className="bg-slate-800 text-xs max-w-xs">
-                                <p className="text-white">Una computadora se marca como "desconocida" cuando no ha registrado actividad en los últimos 3 meses.</p>
-                              </TooltipContent>
-                            </Tooltip>
+                            <Info 
+                              className="h-3 w-3 ml-1 text-slate-400 cursor-help"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // Puedes agregar lógica adicional aquí si es necesario
+                              }}
+                            />
+                            <div className="invisible group-hover:visible absolute -top-12 left-0 bg-slate-800 text-white text-xs p-2 rounded w-64">
+                              Una computadora se marca como "desconocida" cuando no ha registrado actividad en los últimos 3 meses.
+                            </div>
                           </span>
                         </div>
                       </div>
                     </div>
 
                     <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <div className="flex h-8 gap-px">
+                      <div className="flex h-8 gap-px" style={{ maxWidth: '100%' }}>
                         {classroom.computers.map((computer) => (
                           <Tooltip key={computer.id}>
                             <TooltipTrigger asChild>
-                              <div
-                                className={`flex-1 transition-all duration-200 ${statusColors[computer.status]} first:rounded-l last:rounded-r cursor-pointer`}
+                              <button
+                                className={`w-10 min-w-[10px] transition-all duration-200 ${statusColors[computer.status]} first:rounded-l last:rounded-r`}
                                 onClick={() => setSelectedComputer(computer)}
+                                style={{ width: `${100/50}%` }} // Divide por el máximo de computadoras (50)
                               />
                             </TooltipTrigger>
                             <TooltipContent side="top" className="bg-slate-800 text-xs p-2">
@@ -171,6 +187,13 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                             </TooltipContent>
                           </Tooltip>
                         ))}
+                        {/* Relleno para mantener consistencia visual cuando hay menos de 50 PCs */}
+                        {classroom.computers.length < 50 && (
+                          <div 
+                            className="bg-transparent"
+                            style={{ width: `${(50 - classroom.computers.length) * (100/50)}%` }}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
