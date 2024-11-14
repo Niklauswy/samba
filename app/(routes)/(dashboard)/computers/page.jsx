@@ -58,9 +58,9 @@ const exampleClassrooms = [
 ]
 
 const statusColors = {
-  activo: 'bg-green-500',
-  mantenimiento: 'bg-yellow-500',
-  desconocido: 'bg-gray-500',
+  activo: 'bg-emerald-500 hover:bg-emerald-600',
+  mantenimiento: 'bg-amber-500 hover:bg-amber-600',
+  desconocido: 'bg-slate-300 hover:bg-slate-400',
 }
 
 const statusNames = {
@@ -101,112 +101,105 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
 
   return (
     <TooltipProvider>
-      <div className="p-8 bg-white min-h-screen">
-        <h1 className="text-4xl font-bold mb-10 text-gray-800 text-center">Monitoreo de Estados por Salón</h1>
-        <div className="flex justify-center mb-6 space-x-6">
-          <div className="flex items-center">
-            <div className="w-5 h-5 bg-green-500 rounded mr-2"></div>
-            <span className="text-gray-700">Operativo</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-5 h-5 bg-red-500 rounded mr-2"></div>
-            <span className="text-gray-700">Problemas</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-5 h-5 bg-gray-500 rounded mr-2"></div>
-            <span className="text-gray-700">Sin Datos</span>
-          </div>
-        </div>
-        <div className="space-y-10">
+      <div className="p-8 bg-slate-50 min-h-screen">
+        <h1 className="text-3xl font-bold mb-10 text-slate-800 text-center">
+          Estado de Laboratorios
+        </h1>
+        
+        <div className="max-w-5xl mx-auto space-y-8">
           {classrooms.map((classroom) => {
             const totalComputers = classroom.computers.length
             const activeComputers = classroom.computers.filter(c => c.status === 'activo').length
             const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(2)
 
             return (
-              <Card key={classroom.id} className="shadow-md">
-                <CardHeader className="flex justify-between items-center p-6 bg-gray-50">
-                  <div>
-                    <CardTitle className="text-2xl font-semibold flex items-center">
-                      <School className="mr-3 h-6 w-6 text-blue-500" />
-                      {classroom.name}
-                    </CardTitle>
-                    <div className="text-gray-500 flex items-center mt-2">
-                      <Calendar className="mr-2 h-5 w-5" />
-                      <span>90 days ago - Today</span>
+              <Card key={classroom.id} className="shadow-lg border-0 bg-white/50 backdrop-blur">
+                <CardHeader className="border-b border-slate-100 bg-white">
+                  <div className="flex justify-between items-center">
+                    <div className="space-y-1">
+                      <CardTitle className="text-xl font-medium flex items-center text-slate-700">
+                        <School className="mr-2 h-5 w-5 text-slate-600" />
+                        {classroom.name}
+                      </CardTitle>
+                      <div className="text-sm text-slate-500 flex items-center">
+                        <Clock className="mr-2 h-4 w-4" />
+                        Uptime: {activePercentage}%
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-gray-600 text-lg flex items-center">
-                    <Clock className="mr-2 h-5 w-5" />
-                    Uptime: {activePercentage}%
+                    <Badge variant="secondary" className="text-xs bg-slate-100 text-slate-700">
+                      Última actualización: hace 5 minutos
+                    </Badge>
                   </div>
                 </CardHeader>
+
                 <CardContent className="p-6">
-                  {/* Add Status History Tracker */}
-                  <div className="mb-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Estado Histórico</span>
-                      <span className="text-xs text-gray-500">Última actualización: {classroom.statusHistory.length} días atrás</span>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <span className="text-sm font-medium text-slate-700">Estado Histórico</span>
+                        <div className="flex items-center space-x-2 text-xs text-slate-500">
+                          <div className="w-2 h-2 bg-emerald-500 rounded-full"/>
+                          <span>Activo</span>
+                          <div className="w-2 h-2 bg-amber-500 rounded-full ml-2"/>
+                          <span>Mantenimiento</span>
+                          <div className="w-2 h-2 bg-slate-300 rounded-full ml-2"/>
+                          <span>Sin datos</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-slate-500">90 días</div>
                     </div>
-                    <div className="flex h-4 space-x-0.5">
-                      {classroom.statusHistory.map((status, idx) => (
-                        <div
-                          key={idx}
-                          className={`flex-1 ${statusColors[status]} rounded`}
-                          title={`Día ${idx + 1}: ${statusNames[status]}`}
-                        ></div>
-                      ))}
+
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      <div className="flex h-8 gap-px">
+                        {classroom.statusHistory.map((status, idx) => (
+                          <Tooltip key={idx}>
+                            <TooltipTrigger asChild>
+                              <div
+                                className={`flex-1 transition-all duration-200 ${statusColors[status]} first:rounded-l last:rounded-r`}
+                                onClick={() => setSelectedComputer(computer)}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="bg-slate-800 text-xs">
+                              <p className="text-white">
+                                {new Date(Date.now() - (idx * 24 * 60 * 60 * 1000)).toLocaleDateString()}
+                              </p>
+                              <p className="text-slate-300">{statusNames[status]}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        ))}
+                      </div>
+                      <div className="flex justify-between mt-2 text-xs text-slate-400">
+                        <span>90 días atrás</span>
+                        <span>Hoy</span>
+                      </div>
                     </div>
                   </div>
-                  
-                  {/* Existing Horizontal Tracker (Optional: Remove if replaced by status history) */}
-                  <div className="flex items-center space-x-2 overflow-x-auto mb-4">
-                    {classroom.computers.map((computer) => (
-                      <Tooltip key={computer.id}>
-                        <TooltipTrigger asChild>
-                          <div
-                            className={`w-6 h-6 rounded-lg ${statusColors[computer.status]} flex items-center justify-center cursor-pointer transition-transform transform hover:scale-110 shadow-md`}
-                            onClick={() => setSelectedComputer(computer)}
-                          >
-                            {computer.status === 'activo' && <Check className="h-4 w-4 text-white" />}
-                            {computer.status === 'mantenimiento' && <X className="h-4 w-4 text-white" />}
-                            {computer.status === 'desconocido' && <Minus className="h-4 w-4 text-white" />}
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent className="bg-gray-800 text-white p-2 rounded">
-                          <p><strong>Estado:</strong> {statusNames[computer.status]}</p>
-                          <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    ))}
-                  </div>
-                  
-                  {/* ...existing code... */}
                 </CardContent>
               </Card>
             )
           })}
-          {selectedComputer && (
-            <Dialog open={!!selectedComputer} onOpenChange={() => setSelectedComputer(null)}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="flex items-center">
-                    <Info className="mr-2 h-5 w-5 text-blue-500" />
-                    Información de {selectedComputer.name}
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="mt-6 space-y-4">
-                  <p><strong>Estado:</strong> {statusNames[selectedComputer.status]}</p>
-                  <p><strong>Sistema Operativo:</strong> {selectedComputer.os}</p>
-                  <p><strong>Dirección IP:</strong> {selectedComputer.ip}</p>
-                  <p><strong>Última actualización:</strong> {selectedComputer.lastLogin}</p>
-                  <p><strong>Uptime:</strong> {selectedComputer.uptimePercentage || '98.08%'}</p>
-                  <p><strong>Cantidad de inicios:</strong> {selectedComputer.loginCount}</p>
-                </div>
-              </DialogContent>
-            </Dialog>
-          )}
         </div>
+
+        {selectedComputer && (
+          <Dialog open={!!selectedComputer} onOpenChange={() => setSelectedComputer(null)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="flex items-center">
+                  <Info className="mr-2 h-5 w-5 text-blue-500" />
+                  Información de {selectedComputer.name}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="mt-6 space-y-4">
+                <p><strong>Estado:</strong> {statusNames[selectedComputer.status]}</p>
+                <p><strong>Sistema Operativo:</strong> {selectedComputer.os}</p>
+                <p><strong>Dirección IP:</strong> {selectedComputer.ip}</p>
+                <p><strong>Última actualización:</strong> {selectedComputer.lastLogin}</p>
+                <p><strong>Uptime:</strong> {selectedComputer.uptimePercentage || '98.08%'}</p>
+                <p><strong>Cantidad de inicios:</strong> {selectedComputer.loginCount}</p>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </TooltipProvider>
   )
