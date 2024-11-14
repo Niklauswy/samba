@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Monitor, Laptop, Info, School, ChevronDown } from "lucide-react"
+import { Monitor, Laptop, Info, School, ChevronDown, CheckCircle, XCircle, MinusCircle, Clock, Calendar } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { Terminal, Apple, HelpCircle } from "lucide-react"
@@ -63,6 +63,12 @@ const statusNames = {
   desconocido: 'Desconocido',
 }
 
+const statusIcons = {
+  activo: <CheckCircle className="h-5 w-5 text-green-500" />,
+  mantenimiento: <XCircle className="h-5 w-5 text-red-500" />,
+  desconocido: <MinusCircle className="h-5 w-5 text-gray-500" />,
+}
+
 export default function ComputerManagement({ classrooms = exampleClassrooms }) {
   const [selectedComputer, setSelectedComputer] = useState(null)
   const [expandedClassrooms, setExpandedClassrooms] = useState({})
@@ -89,62 +95,53 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
 
   return (
     <TooltipProvider>
-      <div className="p-6 bg-gray-100 min-h-screen">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Monitoreo de Estados por Salón</h1>
-        <div className="space-y-6">
+      <div className="p-8 bg-white min-h-screen">
+        <h1 className="text-4xl font-bold mb-10 text-gray-800 text-center">Monitoreo de Estados por Salón</h1>
+        <div className="space-y-10">
           {classrooms.map((classroom) => {
             const totalComputers = classroom.computers.length
             const activeComputers = classroom.computers.filter(c => c.status === 'activo').length
-            const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(0)
+            const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(2)
 
             return (
-              <Card key={classroom.id} className="relative">
-                <CardHeader className="flex justify-between items-center p-4">
-                  <CardTitle className="text-xl font-semibold flex items-center">
-                    <School className="mr-2 h-5 w-5" />
-                    {classroom.name}
-                  </CardTitle>
-                  <div className="text-sm font-medium text-gray-600">
-                    {activePercentage}% Activas
+              <Card key={classroom.id} className="shadow-md">
+                <CardHeader className="flex justify-between items-center p-6 bg-gray-50">
+                  <div>
+                    <CardTitle className="text-2xl font-semibold flex items-center">
+                      <School className="mr-3 h-6 w-6 text-blue-500" />
+                      {classroom.name}
+                    </CardTitle>
+                    <div className="text-gray-500 flex items-center mt-2">
+                      <Calendar className="mr-2 h-5 w-5" />
+                      <span>90 days ago - Today</span>
+                    </div>
+                  </div>
+                  <div className="text-gray-600 text-lg flex items-center">
+                    <Clock className="mr-2 h-5 w-5" />
+                    Uptime: {activePercentage}%
                   </div>
                 </CardHeader>
-                <CardContent className="p-4">
-                  <div className="flex space-x-1">
-                    {classroom.computers.map((computer) => {
-                      const statusColor = {
-                        'activo': 'bg-green-500',
-                        'mantenimiento': 'bg-red-500',
-                        'desconocido': 'bg-gray-500'
-                      }[computer.status]
-
-                      return (
-                        <Tooltip key={computer.id}>
-                          <TooltipTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className={`w-full h-4 ${statusColor} flex-1`}
-                              onClick={() => setSelectedComputer(computer)}
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p><strong>Nombre:</strong> {computer.name}</p>
-                            <p><strong>Estado:</strong> {statusNames[computer.status]}</p>
-                            <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      )
-                    })}
-                  </div>
-                  <div className="mt-4 flex space-x-4">
-                    <Badge variant="secondary" className="flex items-center">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div> Activo
-                    </Badge>
-                    <Badge variant="secondary" className="flex items-center">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div> Mantenimiento
-                    </Badge>
-                    <Badge variant="secondary" className="flex items-center">
-                      <div className="w-2 h-2 bg-gray-500 rounded-full mr-2"></div> Desconocido
-                    </Badge>
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {classroom.computers.map((computer) => (
+                      <div key={computer.id} className="border rounded-lg p-4 hover:shadow">
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-lg font-medium">{computer.name}</h2>
+                          {statusIcons[computer.status]}
+                        </div>
+                        <div className="mt-3 text-gray-500">
+                          <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
+                          <p><strong>Uptime:</strong> {computer.uptimePercentage || '99.43%'}</p>
+                        </div>
+                        <Button
+                          variant="link"
+                          className="mt-4 text-blue-600 p-0"
+                          onClick={() => setSelectedComputer(computer)}
+                        >
+                          Ver detalles
+                        </Button>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
@@ -159,11 +156,12 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                     Información de {selectedComputer.name}
                   </DialogTitle>
                 </DialogHeader>
-                <div className="mt-4 space-y-3">
+                <div className="mt-6 space-y-4">
                   <p><strong>Estado:</strong> {statusNames[selectedComputer.status]}</p>
                   <p><strong>Sistema Operativo:</strong> {selectedComputer.os}</p>
                   <p><strong>Dirección IP:</strong> {selectedComputer.ip}</p>
-                  <p><strong>Último inicio de sesión:</strong> {selectedComputer.lastLogin}</p>
+                  <p><strong>Última actualización:</strong> {selectedComputer.lastLogin}</p>
+                  <p><strong>Uptime:</strong> {selectedComputer.uptimePercentage || '98.08%'}</p>
                   <p><strong>Cantidad de inicios:</strong> {selectedComputer.loginCount}</p>
                 </div>
               </DialogContent>
