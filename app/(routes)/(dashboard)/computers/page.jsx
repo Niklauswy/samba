@@ -21,6 +21,12 @@ const osIcons = {
   unknown: <HelpCircle className="h-6 w-6 text-gray-500" />,
 }
 
+// Modificar la distribución de estados para favorecer 'activo'
+const getRandomStatus = () => {
+  const rand = Math.random();
+  return rand < 0.85 ? 'activo' : rand < 0.95 ? 'mantenimiento' : 'desconocido';
+};
+
 // Actualizar exampleClassrooms con al menos 20 computadoras por salón
 const exampleClassrooms = [
   {
@@ -32,7 +38,7 @@ const exampleClassrooms = [
     computers: Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 1}`,
       name: `PC-101-${i + 1}`,
-      status: ['activo', 'mantenimiento', 'desconocido'][i % 3],
+      status: getRandomStatus(),
       os: ['windows', 'unix', 'mac', 'unknown'][i % 4],
       ip: `192.168.1.${100 + i + 1}`,
       lastLogin: '2023-10-01 08:30', // Agregar 'lastLogin'
@@ -48,7 +54,7 @@ const exampleClassrooms = [
     computers: Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 21}`,
       name: `PC-102-${i + 1}`,
-      status: ['activo', 'mantenimiento', 'desconocido'][i % 3],
+      status: getRandomStatus(),
       os: ['windows', 'unix', 'mac', 'unknown'][i % 4],
       ip: `192.168.2.${100 + i + 1}`,
       lastLogin: '2023-10-01 08:30', // Agregar 'lastLogin'
@@ -61,7 +67,7 @@ const exampleClassrooms = [
     computers: Array.from({ length: 50 }, (_, i) => ({
       id: `${i + 41}`,
       name: `PC-LAB-${i + 1}`,
-      status: ['activo', 'mantenimiento', 'desconocido'][i % 3],
+      status: getRandomStatus(),
       os: ['windows', 'unix', 'mac', 'unknown'][i % 4],
       ip: `192.168.3.${100 + i + 1}`,
       lastLogin: '2023-10-01 08:30',
@@ -101,7 +107,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
 
   if (!classrooms || classrooms.length === 0) {
     return (
-      <div className="p-6 bg-gray-50 min-h-screen flex items-center justify-center">
+      <div className="p-6 bg-gray-50 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="text-center py-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">No hay salones disponibles</h2>
@@ -122,6 +128,8 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
         <div className="max-w-5xl mx-auto space-y-8">
           {classrooms.map((classroom) => {
             const totalComputers = classroom.computers.length
+            const activeComputers = classroom.computers.filter(c => c.status === 'activo').length;
+            const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(1);
 
             return (
               <Card key={classroom.id} className="shadow-lg border-0 bg-white/50 backdrop-blur">
@@ -136,8 +144,8 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                         {totalComputers} computadoras
                       </div>
                     </div>
-                    <Badge variant="secondary" className="text-xs bg-slate-100 text-slate-700">
-                      Última actualización: hace 5 minutos
+                    <Badge variant="secondary" className="text-xs bg-emerald-50 text-emerald-700">
+                      {activePercentage}% Activas
                     </Badge>
                   </div>
                 </CardHeader>
@@ -214,7 +222,11 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
               </DialogHeader>
               <div className="mt-6 space-y-4">
                 <p><strong>Estado:</strong> {statusNames[selectedComputer.status]}</p>
-                <p><strong>Sistema Operativo:</strong> {selectedComputer.os}</p>
+                <div className="flex items-center">
+                  <strong className="mr-2">Sistema Operativo:</strong>
+                  {osIcons[selectedComputer.os]}
+                  <span className="ml-2">{selectedComputer.os}</span>
+                </div>
                 <p><strong>Dirección IP:</strong> {selectedComputer.ip}</p>
                 <p><strong>Última actualización:</strong> {selectedComputer.lastLogin}</p>
                 <p><strong>Uptime:</strong> {selectedComputer.uptimePercentage || '98.08%'}</p>
