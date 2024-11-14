@@ -42,8 +42,9 @@ const AnimatedFrownIcon = () => (
       repeatType: "loop",
       ease: "easeInOut"
     }}
+    className="z-20" // Added z-index to ensure visibility
   >
-    <FrownIcon className="w-32 h-32 text-muted-foreground" />
+    <FrownIcon className="w-32 h-32 text-red-500" /> {/* Changed color for better visibility */}
   </motion.div>
 )
 
