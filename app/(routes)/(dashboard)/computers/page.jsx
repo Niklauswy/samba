@@ -7,13 +7,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Monitor, Laptop, Info, School } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
-import { Windows, Terminal, Apple, HelpCircle } from "lucide-react"
+import { Terminal, Apple, HelpCircle } from "lucide-react"
 
 // Elimina importaciones innecesarias
 // import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 const osIcons = {
-  windows: <Windows className="h-6 w-6 text-blue-500" />,
+  windows: <Monitor className="h-6 w-6 text-blue-500" />, // Reemplazado con 'Monitor'
   unix: <Terminal className="h-6 w-6 text-green-500" />,
   mac: <Apple className="h-6 w-6 text-gray-800" />,
   unknown: <HelpCircle className="h-6 w-6 text-gray-500" />,
