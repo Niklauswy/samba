@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Monitor, Laptop, Info, School } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Tooltip } from "@/components/ui/tooltip"
+import { Tooltip, TooltipProvider } from "@/components/ui/tooltip"
 import { Windows, Terminal, Apple, HelpCircle } from "lucide-react"
+import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 const osIcons = {
   windows: <Windows className="h-6 w-6 text-blue-500" />,
@@ -101,6 +102,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-4">
                   {classroom.computers.map((computer) => (
+                <TooltipProvider key={computer.id}>
                     <Tooltip key={computer.id} content={computer.os}>
                       <Button
                         variant="outline"
@@ -111,6 +113,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                         <span className="mt-2 text-xs font-medium text-gray-700">{computer.name}</span>
                       </Button>
                     </Tooltip>
+                    </TooltipProvider>
                   ))}
                 </div>
               </CardContent>
