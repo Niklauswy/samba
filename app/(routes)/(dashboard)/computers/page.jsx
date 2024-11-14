@@ -4,12 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Monitor, Laptop, Info, School } from "lucide-react"
+import { Monitor, Laptop, Info, School, ChevronDown } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { Terminal, Apple, HelpCircle } from "lucide-react"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
-import { ChevronDown, Info } from "lucide-react"
 
 // Elimina importaciones innecesarias
 // import { TooltipPortal } from '@radix-ui/react-tooltip'
