@@ -31,7 +31,7 @@ export const dataSlidebarRoutes = [
     {
         icon: Computer,
         label: "Computadoras",
-        href: "/computadoras",
+        href: "/computers",
         section: "gestionar"
 
     },
