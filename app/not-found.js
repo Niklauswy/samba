@@ -38,13 +38,13 @@ export default function NotFound() {
         </CardHeader>
         <CardContent className="p-6">
           <div className="flex justify-center mb-6">
-            <FrownIcon className="w-32 h-32 text-red-500" /> {/* Replaced AnimatedFrownIcon with static FrownIcon */}
+            <FrownIcon className="w-32 h-32 text-red-500" /> 
           </div>
           <p className="text-center text-muted-foreground mb-4">
-            Parece que nuestros cálculos han encontrado una anomalía en el espacio-tiempo.
+            Parece que hay una anomalía en el espacio-tiempo.
           </p>
           <p className="text-center text-sm text-muted-foreground">
-            Nuestros mejores científicos están trabajando en resolver esta ecuación. Mientras tanto, puedes intentar recargar o volver al inicio.
+            Estamos trabajando en resolverlo. Mientras tanto, puede intentar recargar o volver al inicio.
           </p>
         </CardContent>
         <CardFooter className="flex justify-center gap-4 p-6 bg-muted/50">
@@ -54,12 +54,12 @@ export default function NotFound() {
             className="flex items-center gap-2 hover:bg-secondary"
           >
             <RotateCcwIcon className="w-4 h-4" />
-            Recalcular
+            Recargar
           </Button>
           <Button asChild className="flex items-center gap-2">
             <Link href="/">
               <HomeIcon className="w-4 h-4" />
-              Volver al laboratorio
+              Volver al Inicio
             </Link>
           </Button>
         </CardFooter>
