@@ -88,87 +88,89 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Monitoreo de Estados por Salón</h1>
-      <div className="space-y-6">
-        {classrooms.map((classroom) => {
-          const totalComputers = classroom.computers.length
-          const activeComputers = classroom.computers.filter(c => c.status === 'activo').length
-          const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(0)
+    <TooltipProvider>
+      <div className="p-6 bg-gray-100 min-h-screen">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Monitoreo de Estados por Salón</h1>
+        <div className="space-y-6">
+          {classrooms.map((classroom) => {
+            const totalComputers = classroom.computers.length
+            const activeComputers = classroom.computers.filter(c => c.status === 'activo').length
+            const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(0)
 
-          return (
-            <Card key={classroom.id} className="relative">
-              <CardHeader className="flex justify-between items-center p-4">
-                <CardTitle className="text-xl font-semibold flex items-center">
-                  <School className="mr-2 h-5 w-5" />
-                  {classroom.name}
-                </CardTitle>
-                <div className="text-sm font-medium text-gray-600">
-                  {activePercentage}% Activas
-                </div>
-              </CardHeader>
-              <CardContent className="p-4">
-                <div className="flex space-x-1">
-                  {classroom.computers.map((computer) => {
-                    const statusColor = {
-                      'activo': 'bg-green-500',
-                      'mantenimiento': 'bg-red-500',
-                      'desconocido': 'bg-gray-500'
-                    }[computer.status]
+            return (
+              <Card key={classroom.id} className="relative">
+                <CardHeader className="flex justify-between items-center p-4">
+                  <CardTitle className="text-xl font-semibold flex items-center">
+                    <School className="mr-2 h-5 w-5" />
+                    {classroom.name}
+                  </CardTitle>
+                  <div className="text-sm font-medium text-gray-600">
+                    {activePercentage}% Activas
+                  </div>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <div className="flex space-x-1">
+                    {classroom.computers.map((computer) => {
+                      const statusColor = {
+                        'activo': 'bg-green-500',
+                        'mantenimiento': 'bg-red-500',
+                        'desconocido': 'bg-gray-500'
+                      }[computer.status]
 
-                    return (
-                      <Tooltip key={computer.id}>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            className={`w-full h-4 ${statusColor} flex-1`}
-                            onClick={() => setSelectedComputer(computer)}
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p><strong>Nombre:</strong> {computer.name}</p>
-                          <p><strong>Estado:</strong> {statusNames[computer.status]}</p>
-                          <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    )
-                  })}
+                      return (
+                        <Tooltip key={computer.id}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              className={`w-full h-4 ${statusColor} flex-1`}
+                              onClick={() => setSelectedComputer(computer)}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p><strong>Nombre:</strong> {computer.name}</p>
+                            <p><strong>Estado:</strong> {statusNames[computer.status]}</p>
+                            <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )
+                    })}
+                  </div>
+                  <div className="mt-4 flex space-x-4">
+                    <Badge variant="secondary" className="flex items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div> Activo
+                    </Badge>
+                    <Badge variant="secondary" className="flex items-center">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div> Mantenimiento
+                    </Badge>
+                    <Badge variant="secondary" className="flex items-center">
+                      <div className="w-2 h-2 bg-gray-500 rounded-full mr-2"></div> Desconocido
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })}
+          {selectedComputer && (
+            <Dialog open={!!selectedComputer} onOpenChange={() => setSelectedComputer(null)}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="flex items-center">
+                    <Info className="mr-2 h-5 w-5 text-blue-500" />
+                    Información de {selectedComputer.name}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="mt-4 space-y-3">
+                  <p><strong>Estado:</strong> {statusNames[selectedComputer.status]}</p>
+                  <p><strong>Sistema Operativo:</strong> {selectedComputer.os}</p>
+                  <p><strong>Dirección IP:</strong> {selectedComputer.ip}</p>
+                  <p><strong>Último inicio de sesión:</strong> {selectedComputer.lastLogin}</p>
+                  <p><strong>Cantidad de inicios:</strong> {selectedComputer.loginCount}</p>
                 </div>
-                <div className="mt-4 flex space-x-4">
-                  <Badge variant="secondary" className="flex items-center">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div> Activo
-                  </Badge>
-                  <Badge variant="secondary" className="flex items-center">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div> Mantenimiento
-                  </Badge>
-                  <Badge variant="secondary" className="flex items-center">
-                    <div className="w-2 h-2 bg-gray-500 rounded-full mr-2"></div> Desconocido
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          )
-        })}
-        {selectedComputer && (
-          <Dialog open={!!selectedComputer} onOpenChange={() => setSelectedComputer(null)}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="flex items-center">
-                  <Info className="mr-2 h-5 w-5 text-blue-500" />
-                  Información de {selectedComputer.name}
-                </DialogTitle>
-              </DialogHeader>
-              <div className="mt-4 space-y-3">
-                <p><strong>Estado:</strong> {statusNames[selectedComputer.status]}</p>
-                <p><strong>Sistema Operativo:</strong> {selectedComputer.os}</p>
-                <p><strong>Dirección IP:</strong> {selectedComputer.ip}</p>
-                <p><strong>Último inicio de sesión:</strong> {selectedComputer.lastLogin}</p>
-                <p><strong>Cantidad de inicios:</strong> {selectedComputer.loginCount}</p>
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
+              </DialogContent>
+            </Dialog>
+          )}
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }
