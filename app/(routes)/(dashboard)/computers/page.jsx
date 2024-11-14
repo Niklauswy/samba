@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Monitor, Laptop, Info, School, ChevronDown, CheckCircle, XCircle, MinusCircle, Clock, Calendar } from "lucide-react"
+import { Monitor, Laptop, Info, School, ChevronDown, CheckCircle, XCircle, MinusCircle, Clock, Calendar, Check, X, Minus } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { Terminal, Apple, HelpCircle } from "lucide-react"
@@ -122,25 +122,18 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                   </div>
                 </CardHeader>
                 <CardContent className="p-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="flex space-x-2 overflow-x-auto">
                     {classroom.computers.map((computer) => (
-                      <div key={computer.id} className="border rounded-lg p-4 hover:shadow">
-                        <div className="flex items-center justify-between">
-                          <h2 className="text-lg font-medium">{computer.name}</h2>
-                          {statusIcons[computer.status]}
-                        </div>
-                        <div className="mt-3 text-gray-500">
-                          <p><strong>Último inicio de sesión:</strong> {computer.lastLogin}</p>
-                          <p><strong>Uptime:</strong> {computer.uptimePercentage || '99.43%'}</p>
-                        </div>
-                        <Button
-                          variant="link"
-                          className="mt-4 text-blue-600 p-0"
+                      <Tooltip key={computer.id} content={`Estado: ${statusNames[computer.status]}\nÚltimo inicio de sesión: ${computer.lastLogin}`}>
+                        <div
+                          className={`w-4 h-4 rounded ${statusColors[computer.status]} flex items-center justify-center cursor-pointer`}
                           onClick={() => setSelectedComputer(computer)}
                         >
-                          Ver detalles
-                        </Button>
-                      </div>
+                          {computer.status === 'activo' && <Check className="h-3 w-3 text-white" />}
+                          {computer.status === 'mantenimiento' && <X className="h-3 w-3 text-white" />}
+                          {computer.status === 'desconocido' && <Minus className="h-3 w-3 text-white" />}
+                        </div>
+                      </Tooltip>
                     ))}
                   </div>
                 </CardContent>
