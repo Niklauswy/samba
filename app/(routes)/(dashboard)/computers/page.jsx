@@ -165,7 +165,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                               }}
                             />
                             <div className="invisible group-hover:visible absolute -top-12 left-0 bg-slate-800 text-white text-xs p-2 rounded w-64">
-                              Una computadora se marca como "desconocida" cuando no ha registrado actividad en los últimos 3 meses.
+                              Una computadora se marca como &quot;desconocida&quot; cuando no ha registrado actividad en los últimos 3 meses.
                             </div>
                           </span>
                         </div>
