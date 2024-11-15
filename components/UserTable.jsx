@@ -506,7 +506,7 @@ export default function UserTable({ users, refreshUsers }) {
 
         </div>
     );
-    );
+    
 }
 
-}
+
