@@ -11,23 +11,19 @@ import { Terminal, Apple, HelpCircle } from "lucide-react"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import { Progress } from "@/components/ui/progress"
 
-// Elimina importaciones innecesarias
-// import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 const osIcons = {
-  windows: <Monitor className="h-6 w-6 text-blue-500" />, // Reemplazado con 'Monitor'
+  windows: <Monitor className="h-6 w-6 text-blue-500" />,
   unix: <Terminal className="h-6 w-6 text-green-500" />,
   mac: <Apple className="h-6 w-6 text-gray-800" />,
   unknown: <HelpCircle className="h-6 w-6 text-gray-500" />,
 }
 
-// Modificar la distribución de estados para favorecer 'activo'
 const getRandomStatus = () => {
   const rand = Math.random();
   return rand < 0.85 ? 'activo' : rand < 0.95 ? 'mantenimiento' : 'desconocido';
 };
 
-// Actualizar exampleClassrooms con al menos 20 computadoras por salón
 const exampleClassrooms = [
   {
     id: '1',
