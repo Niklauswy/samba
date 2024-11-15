@@ -181,7 +181,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                               <button
                                 className={`w-10 min-w-[10px] transition-all duration-200 ${statusColors[computer.status]} first:rounded-l last:rounded-r`}
                                 onClick={() => setSelectedComputer(computer)}
-                                style={{ width: `${100/60}%` }}
+                                style={{ width: `${100/90}%` }}
                               />
                             </TooltipTrigger>
                             <TooltipContent side="top" className="bg-slate-800 text-xs p-2">
