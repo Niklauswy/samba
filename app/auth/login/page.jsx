@@ -16,7 +16,6 @@ export default function LoginPage() {
       >
         <Card className="shadow-xl">
           <CardHeader className="text-center">
-            <img src="/uabcLogo.png" alt="UABC Logo" className="mx-auto h-20 w-20" />
             <CardTitle className="mt-4 text-2xl font-bold">Inicio de Sesión</CardTitle>
           </CardHeader>
           <CardContent>
@@ -25,9 +24,6 @@ export default function LoginPage() {
               <Input type="password" placeholder="Contraseña" required />
               <Button type="submit" className="w-full">Ingresar</Button>
             </form>
-            <div className="mt-6 text-center">
-              <img src="/facultadLogo.png" alt="Facultad Logo" className="mx-auto h-16 w-16" />
-            </div>
           </CardContent>
         </Card>
       </motion.div>

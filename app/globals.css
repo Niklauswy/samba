@@ -68,3 +68,21 @@
     transition: background-color 0.5s ease;
   }
 }
+
+@layer components {
+  .zigzag-divider {
+    position: relative;
+  }
+
+  .zigzag-divider:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -50px;
+    width: 100px;
+    height: 100%;
+    background: inherit;
+    transform: skewX(-45deg);
+    transform-origin: top right;
+  }
+}

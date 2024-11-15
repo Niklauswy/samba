@@ -15,7 +15,6 @@ export default function RegisterPage() {
       >
         <Card className="shadow-xl">
           <CardHeader className="text-center">
-            <img src="/uabcLogo.png" alt="UABC Logo" className="mx-auto h-20 w-20" />
             <CardTitle className="mt-4 text-2xl font-bold">Registro</CardTitle>
           </CardHeader>
           <CardContent>
@@ -25,9 +24,6 @@ export default function RegisterPage() {
               <Input type="password" placeholder="Contraseña" required />
               <Button type="submit" className="w-full">Registrarse</Button>
             </form>
-            <div className="mt-6 text-center">
-              <img src="/facultadLogo.png" alt="Facultad Logo" className="mx-auto h-16 w-16" />
-            </div>
           </CardContent>
         </Card>
       </motion.div>
