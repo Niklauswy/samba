@@ -3,9 +3,6 @@ import React from 'react';
 import Image from 'next/image';
 import '@/app/globals.css'; // Asegúrate de importar los estilos globales
 
-export const metadata = {
-  title: 'Autenticación',
-};
 
 export default function AuthLayout({ children }) {
   return (
