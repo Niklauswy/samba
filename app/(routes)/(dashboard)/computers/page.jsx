@@ -73,9 +73,9 @@ const exampleClassrooms = [
 ]
 
 const statusColors = {
-  activo: 'bg-emerald-500 hover:bg-emerald-600',
-  mantenimiento: 'bg-amber-500 hover:bg-amber-600',
-  desconocido: 'bg-slate-300 hover:bg-slate-400',
+  activo: 'bg-primary hover:bg-primary/90',
+  mantenimiento: 'bg-secondary hover:bg-secondary/80',
+  desconocido: 'bg-muted hover:bg-muted/90',
 }
 
 const statusNames = {
