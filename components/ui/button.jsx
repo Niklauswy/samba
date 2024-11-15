@@ -36,10 +36,10 @@ const buttonVariants = cva(
 const Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "button"
   return (
-    <Comp
-      className={cn(buttonVariants({ variant, size, className }), "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300")}
+    (<Comp
+      className={cn(buttonVariants({ variant, size, className }))}
       ref={ref}
-      {...props} />
+      {...props} />)
   );
 })
 Button.displayName = "Button"
