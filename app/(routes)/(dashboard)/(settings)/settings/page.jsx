@@ -235,17 +235,6 @@ export default function Settings() {
                     <Button className="mt-2" onClick={handleUpload}>Upload and Process Users</Button>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5" />
-                  Default User Settings
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="default-password">Default Password</Label>
@@ -259,6 +248,18 @@ export default function Settings() {
                   </div>
                   <Button>Save Default Settings</Button>
                 </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  Default User Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+           
               </CardContent>
             </Card>
           </div>
