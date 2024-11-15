@@ -85,4 +85,12 @@
     transform: skewX(-45deg);
     transform-origin: top right;
   }
+
+  .btn {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .btn-destructive {
+    @apply bg-destructive text-destructive-foreground;
+  }
 }
