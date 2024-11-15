@@ -21,7 +21,7 @@ const osIcons = {
 
 const getRandomStatus = () => {
   const rand = Math.random();
-  return rand < 0.85 ? 'activo' : rand < 0.95 ? 'mantenimiento' : 'desconocido';
+  return rand < 0.85 ? 'activa' : rand < 0.95 ? 'mantenimiento' : 'desconocido';
 };
 
 const exampleClassrooms = [
@@ -29,7 +29,7 @@ const exampleClassrooms = [
     id: '1',
     name: 'Salón 101',
     statusHistory: Array.from({ length: 90 }, () => 
-      ['activo', 'mantenimiento', 'desconocido'][Math.floor(Math.random() * 3)]
+      ['activa', 'mantenimiento', 'desconocido'][Math.floor(Math.random() * 3)]
     ),
     computers: Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 1}`,
@@ -45,7 +45,7 @@ const exampleClassrooms = [
     id: '2',
     name: 'Salón 102',
     statusHistory: Array.from({ length: 90 }, () => 
-      ['activo', 'mantenimiento', 'desconocido'][Math.floor(Math.random() * 3)]
+      ['activa', 'mantenimiento', 'desconocido'][Math.floor(Math.random() * 3)]
     ),
     computers: Array.from({ length: 20 }, (_, i) => ({
       id: `${i + 21}`,
@@ -73,19 +73,19 @@ const exampleClassrooms = [
 ]
 
 const statusColors = {
-  activo: 'bg-emerald-500 hover:bg-emerald-600',
+  activa: 'bg-emerald-500 hover:bg-emerald-600',
   mantenimiento: 'bg-amber-500 hover:bg-amber-600',
   desconocido: 'bg-slate-300 hover:bg-slate-400',
 }
 
 const statusNames = {
-  activo: 'Activo',
+  activa: 'Activa',
   mantenimiento: 'Mantenimiento',
   desconocido: 'Desconocido',
 }
 
 const statusIcons = {
-  activo: <CheckCircle className="h-5 w-5 text-green-500" />,
+  activa: <CheckCircle className="h-5 w-5 text-green-500" />,
   mantenimiento: <XCircle className="h-5 w-5 text-red-500" />,
   desconocido: <MinusCircle className="h-5 w-5 text-gray-500" />,
 }
@@ -124,7 +124,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
         <div className="max-w-5xl mx-auto space-y-8">
           {classrooms.map((classroom) => {
             const totalComputers = classroom.computers.length
-            const activeComputers = classroom.computers.filter(c => c.status === 'activo').length;
+            const activeComputers = classroom.computers.filter(c => c.status === 'activa').length;
             const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(1);
 
             return (
@@ -152,7 +152,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-2 text-xs text-slate-500">
                           <div className="w-2 h-2 bg-emerald-500 rounded-full"/>
-                          <span>Activo</span>
+                          <span>activa</span>
                           <div className="w-2 h-2 bg-amber-500 rounded-full ml-2"/>
                           <span>Mantenimiento</span>
                           <div className="w-2 h-2 bg-slate-300 rounded-full ml-2"/>
@@ -162,7 +162,6 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                               className="h-3 w-3 ml-1 text-slate-400 cursor-help"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                // Puedes agregar lógica adicional aquí si es necesario
                               }}
                             />
                             <div className="invisible group-hover:visible absolute -top-12 left-0 bg-slate-800 text-white text-xs p-2 rounded w-64">
@@ -181,7 +180,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                               <button
                                 className={`w-10 min-w-[10px] transition-all duration-200 ${statusColors[computer.status]} first:rounded-l last:rounded-r`}
                                 onClick={() => setSelectedComputer(computer)}
-                                style={{ width: `${100/90}%` }}
+                                style={{ width: `${100/50}%` }}
                               />
                             </TooltipTrigger>
                             <TooltipContent side="top" className="bg-slate-800 text-xs p-2">
@@ -191,13 +190,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                             </TooltipContent>
                           </Tooltip>
                         ))}
-                        {/* Relleno para mantener consistencia visual cuando hay menos de 50 PCs */}
-                        {classroom.computers.length < 50 && (
-                          <div 
-                            className="bg-transparent"
-                            style={{ width: `${(50 - classroom.computers.length) * (100/50)}%` }}
-                          />
-                        )}
+             
                       </div>
                     </div>
                   </div>
@@ -226,7 +219,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                 <p><strong>Dirección IP:</strong> {selectedComputer.ip}</p>
                 <p><strong>Última actualización:</strong> {selectedComputer.lastLogin}</p>
                 <p><strong>Uptime:</strong> {selectedComputer.uptimePercentage || '98.08%'}</p>
-                <p><strong>Cantidad de inicios:</strong> {selectedComputer.loginCount}</p>
+                <p><strong>Número de inicios de sesión:</strong> {selectedComputer.loginCount}</p>
               </div>
             </DialogContent>
           </Dialog>
