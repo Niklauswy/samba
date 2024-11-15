@@ -181,7 +181,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                               <button
                                 className={`w-10 min-w-[10px] transition-all duration-200 ${statusColors[computer.status]} first:rounded-l last:rounded-r`}
                                 onClick={() => setSelectedComputer(computer)}
-                                style={{ width: `${100/50}%` }} // Divide por el máximo de computadoras (50)
+                                style={{ width: `${100/60}%` }}
                               />
                             </TooltipTrigger>
                             <TooltipContent side="top" className="bg-slate-800 text-xs p-2">
