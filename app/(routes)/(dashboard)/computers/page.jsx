@@ -13,10 +13,10 @@ import { Progress } from "@/components/ui/progress"
 
 
 const osIcons = {
-  windows: <Monitor className="h-6 w-6 text-primary" />,
-  unix: <Terminal className="h-6 w-6 text-secondary" />,
-  mac: <Apple className="h-6 w-6 text-foreground" />,
-  unknown: <HelpCircle className="h-6 w-6 text-muted" />,
+  windows: <Monitor className="h-6 w-6 text-blue-500" />,
+  unix: <Terminal className="h-6 w-6 text-green-500" />,
+  mac: <Apple className="h-6 w-6 text-gray-800" />,
+  unknown: <HelpCircle className="h-6 w-6 text-gray-500" />,
 }
 
 const getRandomStatus = () => {
@@ -73,9 +73,9 @@ const exampleClassrooms = [
 ]
 
 const statusColors = {
-  activo: 'bg-primary hover:bg-primary/90',
-  mantenimiento: 'bg-secondary hover:bg-secondary/80',
-  desconocido: 'bg-muted hover:bg-muted/90',
+  activo: 'bg-emerald-500 hover:bg-emerald-600',
+  mantenimiento: 'bg-amber-500 hover:bg-amber-600',
+  desconocido: 'bg-slate-300 hover:bg-slate-400',
 }
 
 const statusNames = {
@@ -116,8 +116,8 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
 
   return (
     <TooltipProvider>
-      <div className="p-8 bg-background min-h-screen">
-        <h1 className="text-3xl font-bold mb-10 text-foreground text-center">
+      <div className="p-8 bg-slate-50 min-h-screen">
+        <h1 className="text-3xl font-bold mb-10 text-slate-800 text-center">
           Estado de Laboratorios
         </h1>
         
@@ -128,19 +128,19 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
             const activePercentage = ((activeComputers / totalComputers) * 100).toFixed(1);
 
             return (
-              <Card key={classroom.id} className="shadow-lg border-0 bg-card/50 backdrop-blur">
-                <CardHeader className="border-b border-border bg-card">
+              <Card key={classroom.id} className="shadow-lg border-0 bg-white/50 backdrop-blur">
+                <CardHeader className="border-b border-slate-100 bg-white">
                   <div className="flex justify-between items-center">
                     <div className="space-y-1">
-                      <CardTitle className="text-xl font-medium flex items-center text-foreground">
-                        <School className="mr-2 h-5 w-5 text-primary" />
+                      <CardTitle className="text-xl font-medium flex items-center text-slate-700">
+                        <School className="mr-2 h-5 w-5 text-slate-600" />
                         {classroom.name}
                       </CardTitle>
-                      <div className="text-sm text-muted">
+                      <div className="text-sm text-slate-500">
                         {totalComputers} computadoras
                       </div>
                     </div>
-                    <Badge variant="secondary" className="text-xs bg-primary-foreground text-secondary">
+                    <Badge variant="secondary" className="text-xs bg-emerald-50 text-emerald-700">
                       {activePercentage}% Activas
                     </Badge>
                   </div>
@@ -150,22 +150,22 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2 text-xs text-muted">
-                          <div className="w-2 h-2 bg-primary rounded-full"/>
+                        <div className="flex items-center space-x-2 text-xs text-slate-500">
+                          <div className="w-2 h-2 bg-emerald-500 rounded-full"/>
                           <span>Activo</span>
-                          <div className="w-2 h-2 bg-secondary rounded-full ml-2"/>
+                          <div className="w-2 h-2 bg-amber-500 rounded-full ml-2"/>
                           <span>Mantenimiento</span>
-                          <div className="w-2 h-2 bg-muted rounded-full ml-2"/>
+                          <div className="w-2 h-2 bg-slate-300 rounded-full ml-2"/>
                           <span className="flex items-center group relative">
                             Desconocido
                             <Info 
-                              className="h-3 w-3 ml-1 text-muted cursor-help"
+                              className="h-3 w-3 ml-1 text-slate-400 cursor-help"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 // Puedes agregar lógica adicional aquí si es necesario
                               }}
                             />
-                            <div className="invisible group-hover:visible absolute -top-12 left-0 bg-card text-foreground text-xs p-2 rounded w-64">
+                            <div className="invisible group-hover:visible absolute -top-12 left-0 bg-slate-800 text-white text-xs p-2 rounded w-64">
                               Una computadora se marca como "desconocida" cuando no ha registrado actividad en los últimos 3 meses.
                             </div>
                           </span>
@@ -173,7 +173,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                       </div>
                     </div>
 
-                    <div className="bg-card p-4 rounded-lg shadow-sm">
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
                       <div className="flex h-8 gap-px" style={{ maxWidth: '100%' }}>
                         {classroom.computers.map((computer) => (
                           <Tooltip key={computer.id}>
@@ -184,10 +184,10 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
                                 style={{ width: `${100/50}%` }} // Divide por el máximo de computadoras (50)
                               />
                             </TooltipTrigger>
-                            <TooltipContent side="top" className="bg-card text-foreground text-xs p-2">
-                              <p className="text-foreground font-medium">{computer.name}</p>
-                              <p className="text-muted">Último inicio: {computer.lastLogin}</p>
-                              <p className="text-muted">Estado: {statusNames[computer.status]}</p>
+                            <TooltipContent side="top" className="bg-slate-800 text-xs p-2">
+                              <p className="text-white font-medium">{computer.name}</p>
+                              <p className="text-slate-300">Último inicio: {computer.lastLogin}</p>
+                              <p className="text-slate-300">Estado: {statusNames[computer.status]}</p>
                             </TooltipContent>
                           </Tooltip>
                         ))}
@@ -212,7 +212,7 @@ export default function ComputerManagement({ classrooms = exampleClassrooms }) {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle className="flex items-center">
-                  <Info className="mr-2 h-5 w-5 text-primary" />
+                  <Info className="mr-2 h-5 w-5 text-blue-500" />
                   Información de {selectedComputer.name}
                 </DialogTitle>
               </DialogHeader>
