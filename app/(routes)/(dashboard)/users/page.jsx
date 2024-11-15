@@ -7,16 +7,17 @@ import UserTableSkeleton from '@/components/UserTableSkeleton';
 export default function UsersPage() {
     const [users, setUsers] = useState(null);
 
-    useEffect(() => {
-        async function fetchUsersData() {
-            try {
-                const res = await fetch('/api/users');
-                const data = await res.json();
-                setUsers(data);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            }
+    async function fetchUsersData() {
+        try {
+            const res = await fetch('/api/users');
+            const data = await res.json();
+            setUsers(data);
+        } catch (error) {
+            console.error('Error fetching users:', error);
         }
+    }
+
+    useEffect(() => {
         fetchUsersData();
     }, []);
 
@@ -26,7 +27,7 @@ export default function UsersPage() {
 
     return (
         <div>
-            <UserTable users={users} />
+            <UserTable users={users} refreshUsers={fetchUsersData} />
         </div>
     );
 }

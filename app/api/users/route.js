@@ -23,10 +23,10 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 });
         }
 
-        // Call the EBox Samba create method via API
+        // Call the Express.js API endpoint
         const res = await fetch('http://localhost:5000/api/users/create', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData),
         });
 

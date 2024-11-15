@@ -53,7 +53,7 @@ const columns = [
     { key: "accion", label: "", fixed: true },
 ];
 
-export default function UserTable({ users }) {
+export default function UserTable({ users, refreshUsers }) {
     const [filter, setFilter] = useState("");
     const [selectedCarreras, setSelectedCarreras] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
@@ -204,9 +204,11 @@ export default function UserTable({ users }) {
                     password: '',
                     // ...reset other fields...
                 });
+                // Optionally, refresh the users data
+                // fetchUsersData();
             } else {
                 // Handle error
-                console.error('Error adding user');
+                const errorData = await res.json();
             }
         } catch (error) {
             console.error('Error adding user:', error);
@@ -504,4 +506,7 @@ export default function UserTable({ users }) {
 
         </div>
     );
+    );
+}
+
 }
