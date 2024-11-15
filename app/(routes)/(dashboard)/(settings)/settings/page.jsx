@@ -264,10 +264,14 @@ export default function Settings() {
           </div>
         )}
         {activeTab === "Grupos" && (
-          // ...contenido para Grupos...
+          <>
+            {/* contenido para Grupos */}
+          </>
         )}
         {activeTab === "Unidades" && (
-          // ...contenido para Unidades Organizacionales...
+          <>
+            {/* contenido para Unidades Organizacionales */}
+          </>
         )}
         {activeTab === "Logs" && (
           <div>
