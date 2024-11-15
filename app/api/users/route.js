@@ -1,4 +1,3 @@
-
 import { NextResponse } from 'next/server';
 
 export async function GET(request) {
@@ -11,5 +10,31 @@ export async function GET(request) {
     } catch (error) {
         console.error('Error fetching users from external API:', error);
         return NextResponse.error();
+    }
+}
+
+export async function POST(request) {
+    try {
+        const userData = await request.json();
+        // Validate required fields
+        const { samAccountName, givenName, sn, password } = userData;
+
+        if (!samAccountName || !givenName || !sn || !password) {
+            return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 });
+        }
+
+        // Call the EBox Samba create method via API
+        const res = await fetch('http://localhost:5000/api/users/create', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(userData),
+        });
+
+        const data = await res.json();
+
+        return NextResponse.json(data, { status: res.status });
+    } catch (error) {
+        console.error('Error creating user:', error);
+        return NextResponse.json({ error: 'Error al crear el usuario' }, { status: 500 });
     }
 }

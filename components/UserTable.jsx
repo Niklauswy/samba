@@ -30,6 +30,8 @@ import { Monitor, Database, Beaker, Leaf } from "lucide-react";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExportButton from '@/components/ExportButton';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 const careerIcons = {
     CC: <Cpu className="h-4 w-4" />,
@@ -61,7 +63,14 @@ export default function UserTable({ users }) {
     const [visibleColumns, setVisibleColumns] = useState(columns.map((col) => col.key));
     const [sortColumn, setSortColumn] = useState(null);
     const [sortDirection, setSortDirection] = useState("asc");
-
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [newUser, setNewUser] = useState({
+        samAccountName: '',
+        givenName: '',
+        sn: '',
+        password: '',
+        // ...other fields...
+    });
 
     const allCarreras = useMemo(() => [...new Set(users.map((user) => user.ou).filter((ou) => ou))], [users]);
     const allGroups = useMemo(() => {
@@ -177,7 +186,32 @@ export default function UserTable({ users }) {
         }
     }, []);
 
-
+    async function handleAddUser(e) {
+        e.preventDefault();
+        try {
+            const res = await fetch('/api/users', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(newUser),
+            });
+            if (res.ok) {
+                // Refresh users list or handle success
+                setIsDialogOpen(false);
+                setNewUser({
+                    samAccountName: '',
+                    givenName: '',
+                    sn: '',
+                    password: '',
+                    // ...reset other fields...
+                });
+            } else {
+                // Handle error
+                console.error('Error adding user');
+            }
+        } catch (error) {
+            console.error('Error adding user:', error);
+        }
+    }
 
     return (
         <div className="p-4 space-y-4 min-h-screen">
@@ -310,6 +344,38 @@ export default function UserTable({ users }) {
                     columns={columns.filter(col => col.key !== 'accion')}
                     filename="usuarios"
                 />
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                        <Button variant="default">Agregar Usuario</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Agregar Usuario</DialogTitle>
+                        </DialogHeader>
+                        <form onSubmit={handleAddUser} className="space-y-4 mt-4">
+                            <div>
+                                <Label htmlFor="samAccountName">Usuario</Label>
+                                <Input id="samAccountName" value={newUser.samAccountName} onChange={(e) => setNewUser({ ...newUser, samAccountName: e.target.value })} required />
+                            </div>
+                            <div>
+                                <Label htmlFor="givenName">Nombre</Label>
+                                <Input id="givenName" value={newUser.givenName} onChange={(e) => setNewUser({ ...newUser, givenName: e.target.value })} required />
+                            </div>
+                            <div>
+                                <Label htmlFor="sn">Apellido</Label>
+                                <Input id="sn" value={newUser.sn} onChange={(e) => setNewUser({ ...newUser, sn: e.target.value })} required />
+                            </div>
+                            <div>
+                                <Label htmlFor="password">Contraseña</Label>
+                                <Input id="password" type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} required />
+                            </div>
+                            {/* ...other fields... */}
+                            <DialogFooter>
+                                <Button type="submit">Agregar</Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             </div>
             <div className="rounded-lg shadow overflow-hidden">
                 <Table>

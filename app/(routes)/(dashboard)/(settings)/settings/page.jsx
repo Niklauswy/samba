@@ -55,7 +55,7 @@ export default function Settings() {
       } catch (error) {
         console.error('Error fetching syslog:', error);
         setSyslogError('Error fetching syslog'); // Establecer mensaje de error
-      }
+      }ls
     };
 
     // Realizar la solicitud inicial
