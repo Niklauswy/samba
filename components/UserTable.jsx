@@ -108,11 +108,13 @@ export default function UserTable({ users, refreshUsers }) {
 
     // Compute available Groups based on current carrera filters
     const availableGroups = useMemo(() => {
-        const groups = users
-            .filter((user) =>
-                selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)
-            )
-            .flatMap((user) => user.groups);
+        const groups = Array.isArray(users)
+            ? users
+                .filter((user) =>
+                    selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)
+                )
+                .flatMap((user) => user.groups)
+            : [];
         return [...new Set(groups)];
     }, [users, selectedCarreras]);
 
