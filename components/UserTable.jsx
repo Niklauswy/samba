@@ -33,6 +33,7 @@ import ExportButton from '@/components/ExportButton';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
+import { useToast } from "@/components/hooks/use-toast"
 
 const careerIcons = {
     CC: <Cpu className="h-4 w-4" />,
@@ -55,6 +56,7 @@ const columns = [
 ];
 
 export default function UserTable({ users, refreshUsers }) {
+    const { toast } = useToast()
     const [filter, setFilter] = useState("");
     const [selectedCarreras, setSelectedCarreras] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
@@ -233,15 +235,26 @@ export default function UserTable({ users, refreshUsers }) {
                     // ...reset other fields...
                 });
                 refreshUsers();
-                debug("Usuario agregado exitosamente");
+                toast({
+                    title: "Usuario creado",
+                    description: `El usuario ${newUser.samAccountName} ha sido creado exitosamente.`,
+                });
             } else {
                 // Handle error
-                debug(`Error al agregar usuario: ${data.error}`);
-                alert(`Error: ${data.error}`);
+                console.error(`Error adding user: ${data.error}`);
+                toast({
+                    title: "Error",
+                    description: `Error: ${data.error}`,
+                    variant: "destructive",
+                });
             }
         } catch (error) {
             console.error('Error adding user:', error);
-            alert('Error inesperado al agregar el usuario.');
+            toast({
+                title: "Error inesperado",
+                description: 'Error inesperado al agregar el usuario.',
+                variant: "destructive",
+            });
         }
     }
 
@@ -384,61 +397,63 @@ export default function UserTable({ users, refreshUsers }) {
                         <SheetHeader>
                             <SheetTitle>Agregar Usuario</SheetTitle>
                         </SheetHeader>
-                        <form onSubmit={handleAddUser} className="space-y-4 mt-4">
-                            <div>
-                                <Label htmlFor="samAccountName">Usuario</Label>
-                                <Input id="samAccountName" value={newUser.samAccountName} onChange={(e) => setNewUser({ ...newUser, samAccountName: e.target.value })} required />
+                        <form onSubmit={handleAddUser} className="space-y-6 mt-4">
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="flex flex-col">
+                                    <Label htmlFor="samAccountName">Usuario</Label>
+                                    <Input id="samAccountName" value={newUser.samAccountName} onChange={(e) => setNewUser({ ...newUser, samAccountName: e.target.value })} required />
+                                </div>
+                                <div className="flex flex-col">
+                                    <Label htmlFor="givenName">Nombre</Label>
+                                    <Input id="givenName" value={newUser.givenName} onChange={(e) => setNewUser({ ...newUser, givenName: e.target.value })} required />
+                                </div>
+                                <div className="flex flex-col">
+                                    <Label htmlFor="sn">Apellido</Label>
+                                    <Input id="sn" value={newUser.sn} onChange={(e) => setNewUser({ ...newUser, sn: e.target.value })} required />
+                                </div>
+                                <div className="flex flex-col">
+                                    <Label htmlFor="password">Contraseña</Label>
+                                    <Input id="password" type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} required />
+                                </div>
+                                <div className="flex flex-col">
+                                    <Label htmlFor="ou">Unidad Organizativa</Label>
+                                    <select
+                                        id="ou"
+                                        value={newUser.ou}
+                                        onChange={(e) => setNewUser({ ...newUser, ou: e.target.value })}
+                                        required
+                                        className="border rounded p-2 w-full"
+                                    >
+                                        <option value="">Seleccione una unidad</option>
+                                        {ous.map((ou) => (
+                                            <option key={ou} value={ou}>{ou}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex flex-col">
+                                    <Label htmlFor="groups">Grupos</Label>
+                                    <select
+                                        id="groups"
+                                        multiple
+                                        value={newUser.groups}
+                                        onChange={(e) =>
+                                            setNewUser({ 
+                                                ...newUser, 
+                                                groups: Array.from(e.target.selectedOptions, option => option.value) 
+                                            })
+                                        }
+                                        required
+                                        className="border rounded p-2 w-full"
+                                    >
+                                        {groups.map((group) => (
+                                            <option key={group} value={group}>{group}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {/* ...other fields... */}
                             </div>
-                            <div>
-                                <Label htmlFor="givenName">Nombre</Label>
-                                <Input id="givenName" value={newUser.givenName} onChange={(e) => setNewUser({ ...newUser, givenName: e.target.value })} required />
-                            </div>
-                            <div>
-                                <Label htmlFor="sn">Apellido</Label>
-                                <Input id="sn" value={newUser.sn} onChange={(e) => setNewUser({ ...newUser, sn: e.target.value })} required />
-                            </div>
-                            <div>
-                                <Label htmlFor="password">Contraseña</Label>
-                                <Input id="password" type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} required />
-                            </div>
-                            <div>
-                                <Label htmlFor="ou">Unidad Organizativa</Label>
-                                <select
-                                    id="ou"
-                                    value={newUser.ou}
-                                    onChange={(e) => setNewUser({ ...newUser, ou: e.target.value })}
-                                    required
-                                    className="border rounded p-2 w-full"
-                                >
-                                    <option value="">Seleccione una unidad</option>
-                                    {ous.map((ou) => (
-                                        <option key={ou} value={ou}>{ou}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <Label htmlFor="groups">Grupos</Label>
-                                <select
-                                    id="groups"
-                                    multiple
-                                    value={newUser.groups}
-                                    onChange={(e) =>
-                                        setNewUser({ 
-                                            ...newUser, 
-                                            groups: Array.from(e.target.selectedOptions, option => option.value) 
-                                        })
-                                    }
-                                    required
-                                    className="border rounded p-2 w-full"
-                                >
-                                    {groups.map((group) => (
-                                        <option key={group} value={group}>{group}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            {/* ...other fields... */}
-                            <SheetFooter>
-                                <Button type="submit">Agregar</Button>
+                            <SheetFooter className="flex justify-end">
+                                <Button type="submit" className="w-full">Agregar</Button>
                             </SheetFooter>
                         </form>
                     </SheetContent>
@@ -562,6 +577,7 @@ export default function UserTable({ users, refreshUsers }) {
                                 onClick={() => setPage(totalPages)}
                                 disabled={page === totalPages}
                             >
+
                                 »
                             </Button>
                         </div>

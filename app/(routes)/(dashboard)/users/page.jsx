@@ -9,7 +9,12 @@ export default function UsersPage() {
 
     async function fetchUsersData() {
         try {
-            const res = await fetch('/api/users');
+            const res = await fetch('/api/users', {
+                cache: 'no-store',
+            });
+            if (!res.ok) {
+                throw new Error('Error al obtener usuarios');
+            }
             const data = await res.json();
             setUsers(data);
         } catch (error) {

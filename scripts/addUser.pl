@@ -7,12 +7,6 @@ use EBox;
 use EBox::Samba::User;
 use File::Slurp;
 use Try::Tiny;
-use IO::Handle;
-use IO::String;
-
-# Redirect STDOUT to a scalar to prevent unintended output
-my $stdout_capture = IO::String->new();
-open STDOUT, '>', $stdout_capture or die "Cannot redirect STDOUT: $!";
 
 # Function to print debug messages to STDERR
 sub debug {
@@ -118,9 +112,5 @@ foreach my $groupName (@$groups) {
     debug("User $samAccountName added to group $groupName successfully");
 }
 
-# Restore STDOUT to original
-close STDOUT;
-open STDOUT, '>&STDERR' or die "Cannot restore STDOUT: $!";
-
-# Success response
-print encode_json({ success => "Usuario $samAccountName creado correctamente." });
+# Success response with groups included
+print encode_json({ success => "Usuario $samAccountName creado correctamente.", groups => $groups });
