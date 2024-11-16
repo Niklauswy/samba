@@ -51,7 +51,7 @@ const columns = [
     { key: "ou", label: "Carrera" },
     { key: "logonCount", label: "Total Logs", sortable: true },
     { key: "lastLogon", label: "Último Inicio", sortable: true },
-    { key: "groups", label: "Grupos" }, // Added column
+    { key: "groups", label: "Grupos", sortable: false }, // Asegurar que 'groups' no sea sortable si es necesario
     { key: "accion", label: "", fixed: true },
 ];
 
@@ -106,7 +106,7 @@ export default function UserTable({ users, refreshUsers }) {
         return Array.isArray(users) ? users.filter(
             (user) =>
                 (selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)) &&
-                (selectedGroups.length === 0 || user.groups.some(group => selectedGroups.includes(group))) &&
+                (selectedGroups.length === 0 || (user.groups && user.groups.some(group => selectedGroups.includes(group)))) &&
                 Object.values(user).some((value) =>
                     value && value.toString().toLowerCase().includes(filter.toLowerCase())
                 )
