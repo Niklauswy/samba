@@ -72,7 +72,7 @@ export default function UserTable({ users, refreshUsers }) {
         givenName: '',
         sn: '',
         password: '',
-        // ...other fields...
+  
     });
     const [ous, setOus] = useState([]);
     const [groups, setGroups] = useState([]);
