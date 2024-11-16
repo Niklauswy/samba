@@ -83,14 +83,14 @@ export default function UserTable({ users, refreshUsers }) {
 
     // Compute filtered users based on selected filters
     const filteredUsers = useMemo(() => {
-        return users.filter(
+        return Array.isArray(users) ? users.filter(
             (user) =>
                 (selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)) &&
                 (selectedGroups.length === 0 || user.groups.some(group => selectedGroups.includes(group))) &&
                 Object.values(user).some((value) =>
                     value && value.toString().toLowerCase().includes(filter.toLowerCase())
                 )
-        );
+        ) : [];
     }, [filter, selectedCarreras, selectedGroups, users]);
 
     // Compute available Carreras based on current group filters
