@@ -72,9 +72,12 @@ export default function UserTable({ users, refreshUsers }) {
         // ...other fields...
     });
 
-    const allCarreras = useMemo(() => [...new Set(users.map((user) => user.ou).filter((ou) => ou))], [users]);
+    const allCarreras = useMemo(() => [
+        ...new Set(Array.isArray(users) ? users.map((user) => user.ou).filter((ou) => ou) : [])
+    ], [users]);
+
     const allGroups = useMemo(() => {
-        const groups = users.flatMap(user => user.groups);
+        const groups = Array.isArray(users) ? users.flatMap(user => user.groups) : [];
         return [...new Set(groups)];
     }, [users]);
 
