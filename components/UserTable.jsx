@@ -292,14 +292,14 @@ export default function UserTable({ users, refreshUsers }) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
                             {availableGroups.map((group) => {
-                                const count = users.filter(
+                                const count = Array.isArray(users) ? users.filter(
                                     (user) =>
-                                        user.groups.includes(group) &&
+                                        user.groups?.includes(group) &&
                                         (selectedCarreras.length === 0 || selectedCarreras.includes(user.ou)) &&
                                         Object.values(user).some((value) =>
                                             value && value.toString().toLowerCase().includes(filter.toLowerCase())
                                         )
-                                ).length;
+                                ).length : 0;
                                 return (
                                     <DropdownMenuItem key={group} onSelect={() => toggleGroup(group)}>
                                         <div className="flex items-center justify-between w-full">
