@@ -439,7 +439,7 @@ export default function UserTable({ users, refreshUsers }) {
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         ) : column.key === "groups" ? (
-                                            user.groups.map((group) => (
+                                            user.groups?.map((group) => (
                                                 <Badge key={group} variant="secondary" className="mr-1">
                                                     {group}
                                                 </Badge>
