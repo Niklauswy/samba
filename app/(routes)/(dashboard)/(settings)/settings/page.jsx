@@ -270,7 +270,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <HardDrive className="w-5 h-5" />
-                  Log Settings
+                  Configuración de Logs
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
