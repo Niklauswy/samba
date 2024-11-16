@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import UserTable from '@/components/UserTable';
 import UserTableSkeleton from '@/components/UserTableSkeleton';
 
 export default function UsersPage() {
