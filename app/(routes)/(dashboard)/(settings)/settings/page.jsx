@@ -95,7 +95,7 @@ export default function Settings() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold mb-6">Dashboard Settings</h1>
+      <h1 className="text-3xl font-bold mb-6">Configuración</h1>
 
       <div className="tabs">
         <div className="flex space-x-4 border-b">
@@ -138,7 +138,7 @@ export default function Settings() {
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <Server className="w-5 h-5" />
-                System Information
+                Información del Sistema
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -161,7 +161,7 @@ export default function Settings() {
         )}
         {activeTab === "Usuarios" && (
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">User Management</h2>
+            <h2 className="text-2xl font-semibold">Manejo de Usuarios</h2>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -175,9 +175,9 @@ export default function Settings() {
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>CSV Format</DialogTitle>
+                        <DialogTitle>Formato CSV</DialogTitle>
                         <DialogDescription>
-                          Your CSV file should follow this format:
+                          El archivo CSV debe seguir este formato:
                         </DialogDescription>
                       </DialogHeader>
                       <Table>
