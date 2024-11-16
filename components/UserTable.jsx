@@ -32,6 +32,7 @@ import autoTable from 'jspdf-autotable';
 import ExportButton from '@/components/ExportButton';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
 
 const careerIcons = {
     CC: <Cpu className="h-4 w-4" />,
@@ -71,6 +72,23 @@ export default function UserTable({ users, refreshUsers }) {
         password: '',
         // ...other fields...
     });
+    const [ous, setOus] = useState([]);
+    const [groups, setGroups] = useState([]);
+
+    useEffect(() => {
+        async function fetchOus() {
+            const res = await fetch('/api/ous');
+            const data = await res.json();
+            setOus(data);
+        }
+        async function fetchGroups() {
+            const res = await fetch('/api/groups');
+            const data = await res.json();
+            setGroups(data);
+        }
+        fetchOus();
+        fetchGroups();
+    }, []);
 
     const allCarreras = useMemo(() => [
         ...new Set(Array.isArray(users) ? users.map((user) => user.ou).filter((ou) => ou) : [])
@@ -353,14 +371,14 @@ export default function UserTable({ users, refreshUsers }) {
                     columns={columns.filter(col => col.key !== 'accion')}
                     filename="usuarios"
                 />
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                    <DialogTrigger asChild>
+                <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <SheetTrigger asChild>
                         <Button variant="default">Agregar Usuario</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Agregar Usuario</DialogTitle>
-                        </DialogHeader>
+                    </SheetTrigger>
+                    <SheetContent>
+                        <SheetHeader>
+                            <SheetTitle>Agregar Usuario</SheetTitle>
+                        </SheetHeader>
                         <form onSubmit={handleAddUser} className="space-y-4 mt-4">
                             <div>
                                 <Label htmlFor="samAccountName">Usuario</Label>
@@ -378,13 +396,48 @@ export default function UserTable({ users, refreshUsers }) {
                                 <Label htmlFor="password">Contraseña</Label>
                                 <Input id="password" type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} required />
                             </div>
+                            <div>
+                                <Label htmlFor="ou">Unidad Organizativa</Label>
+                                <select
+                                    id="ou"
+                                    value={newUser.ou}
+                                    onChange={(e) => setNewUser({ ...newUser, ou: e.target.value })}
+                                    required
+                                    className="border rounded p-2 w-full"
+                                >
+                                    <option value="">Seleccione una unidad</option>
+                                    {ous.map((ou) => (
+                                        <option key={ou} value={ou}>{ou}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <Label htmlFor="groups">Grupos</Label>
+                                <select
+                                    id="groups"
+                                    multiple
+                                    value={newUser.groups}
+                                    onChange={(e) =>
+                                        setNewUser({ 
+                                            ...newUser, 
+                                            groups: Array.from(e.target.selectedOptions, option => option.value) 
+                                        })
+                                    }
+                                    required
+                                    className="border rounded p-2 w-full"
+                                >
+                                    {groups.map((group) => (
+                                        <option key={group} value={group}>{group}</option>
+                                    ))}
+                                </select>
+                            </div>
                             {/* ...other fields... */}
-                            <DialogFooter>
+                            <SheetFooter>
                                 <Button type="submit">Agregar</Button>
-                            </DialogFooter>
+                            </SheetFooter>
                         </form>
-                    </DialogContent>
-                </Dialog>
+                    </SheetContent>
+                </Sheet>
             </div>
             <div className="rounded-lg shadow overflow-hidden">
                 <Table>

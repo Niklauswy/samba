@@ -17,13 +17,13 @@ export async function POST(request) {
     try {
         const userData = await request.json();
         // Validate required fields
-        const { samAccountName, givenName, sn, password } = userData;
+        const { samAccountName, givenName, sn, password, ou, groups } = userData;
 
-        if (!samAccountName || !givenName || !sn || !password) {
+        if (!samAccountName || !givenName || !sn || !password || !ou || !groups) {
             return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 });
         }
 
-        // Call the Express.js API endpoint
+        // Call the backend API endpoint
         const res = await fetch('http://localhost:5000/api/users/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
