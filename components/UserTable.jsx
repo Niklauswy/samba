@@ -216,9 +216,10 @@ export default function UserTable({ users, refreshUsers }) {
         try {
             const res = await fetch('/api/users', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newUser),
             });
+            const data = await res.json();
             if (res.ok) {
                 // Refresh users list or handle success
                 setIsDialogOpen(false);
@@ -227,16 +228,20 @@ export default function UserTable({ users, refreshUsers }) {
                     givenName: '',
                     sn: '',
                     password: '',
+                    ou: '',
+                    groups: [],
                     // ...reset other fields...
                 });
-                // Optionally, refresh the users data
-                // fetchUsersData();
+                refreshUsers();
+                debug("Usuario agregado exitosamente");
             } else {
                 // Handle error
-                const errorData = await res.json();
+                debug(`Error al agregar usuario: ${data.error}`);
+                alert(`Error: ${data.error}`);
             }
         } catch (error) {
             console.error('Error adding user:', error);
+            alert('Error inesperado al agregar el usuario.');
         }
     }
 

@@ -4,15 +4,39 @@ use strict;
 use warnings;
 use JSON;
 use EBox;
-use EBox::Samba;
-use CGI qw(:standard);
+use EBox::Samba::User;
+use File::Slurp;
+use Try::Tiny;
+use IO::Handle;
+use IO::String;
+
+# Redirect STDOUT to a scalar to prevent unintended output
+my $stdout_capture = IO::String->new();
+open STDOUT, '>', $stdout_capture or die "Cannot redirect STDOUT: $!";
+
+# Function to print debug messages to STDERR
+sub debug {
+    my ($msg) = @_;
+    print STDERR "$msg\n";
+}
+
+debug("Starting addUser.pl script");
 
 # Initialize EBox
 EBox::init();
 
 # Read JSON data from stdin
 my $json_text = do { local $/; <STDIN> };
-my $user_data = decode_json($json_text);
+debug("Received JSON: $json_text");
+
+my $user_data;
+try {
+    $user_data = decode_json($json_text);
+} catch {
+    debug("JSON decoding failed: $_");
+    print encode_json({ error => 'Datos JSON inválidos' });
+    exit(1);
+};
 
 # Extract user data
 my $samAccountName = $user_data->{samAccountName};
@@ -21,52 +45,82 @@ my $sn             = $user_data->{sn};
 my $password       = $user_data->{password};
 my $ou             = $user_data->{ou};
 my $groups         = $user_data->{groups};
+my $description    = $user_data->{description} || '';
+
+debug("Extracted Data - Usuario: $samAccountName, Nombre: $givenName, Apellido: $sn, OU: $ou, Grupos: " . join(", ", @$groups));
 
 # Validate required fields
 unless ($samAccountName && $givenName && $sn && $password && $ou && $groups) {
+    debug("Validation failed: Missing required fields");
     print encode_json({ error => 'Faltan campos requeridos' });
     exit(1);
 }
 
-# Get Samba module instance
-my $samba = EBox::Global->modInstance('samba') or die "No se pudo obtener la instancia de Samba";
+# Get default users container
+my $defaultContainer = EBox::Samba::User->defaultContainer();
+debug("Default Users Container: $defaultContainer");
 
-# Get Users container
-my $users_container = $samba->usersContainer();
+# Function to check if a user already exists
+sub user_exists {
+    my ($username) = @_;
+    my $check_command = `sudo samba-tool user show "$username" 2>/dev/null`;
+    return $check_command ? 1 : 0;
+}
 
-# Set the parent OU
-my $parent_dn = "OU=$ou," . $users_container->dn();
-
-# Prepare user attributes
-my %user_args = (
-    samAccountName => $samAccountName,
-    givenName      => $givenName,
-    sn             => $sn,
-    password       => $password,
-    parent         => $parent_dn,
-);
-
-# Create the user
-my $user;
-eval {
-    $user = EBox::Samba::User->create(%user_args);
-};
-if ($@) {
-    print encode_json({ error => "Error al crear el usuario: $@" });
+# Check if the user already exists
+if (user_exists($samAccountName)) {
+    debug("User $samAccountName already exists");
+    print encode_json({ error => "Usuario $samAccountName ya existe. Saltando..." });
     exit(1);
 }
 
-# Add user to groups
-foreach my $group (@$groups) {
-    eval {
-        my $group_obj = EBox::Samba::Group->fetch($group);
-        $group_obj->addMember($user);
-    };
-    if ($@) {
-        print encode_json({ error => "Error al añadir al grupo $group: $@" });
+# Create the user
+my $user;
+try {
+    $user = EBox::Samba::User->create(
+        samAccountName => $samAccountName,
+        parent         => $defaultContainer,
+        givenName      => $givenName,
+        sn             => $sn,
+        description    => $description,
+        password       => $password
+    );
+    debug("User $samAccountName created successfully");
+} catch {
+    debug("Error creating user: $_");
+    print encode_json({ error => "Error al crear el usuario: $_" });
+    exit(1);
+};
+
+# Move the user to the specified OU if defined and not empty
+if (defined $ou && $ou ne '') {
+    my $commandMove = "sudo samba-tool user move \"$samAccountName\" \"OU=$ou\"";
+    debug("Executing: $commandMove");
+    my $outputMove = qx($commandMove 2>&1);
+    if ($? != 0) {
+        debug("Error moving user: $outputMove");
+        print encode_json({ error => "Error al mover el usuario $samAccountName a la OU $ou: $outputMove" });
         exit(1);
     }
+    debug("User $samAccountName moved to OU $ou successfully");
 }
 
+# Add the user to the specified groups
+foreach my $groupName (@$groups) {
+    my $commandAddGroup = "sudo samba-tool group addmembers \"$groupName\" \"$samAccountName\"";
+    debug("Executing: $commandAddGroup");
+    my $outputAddGroup = qx($commandAddGroup 2>&1);
+    if ($? != 0) {
+        debug("Error adding user to group: $outputAddGroup");
+        print encode_json({ error => "Error al añadir el usuario $samAccountName al grupo $groupName: $outputAddGroup" });
+        exit(1);
+    }
+    debug("User $samAccountName added to group $groupName successfully");
+}
+
+# Restore STDOUT to original
+close STDOUT;
+open STDOUT, '>&STDERR' or die "Cannot restore STDOUT: $!";
+
 # Success response
-print encode_json({ success => 1, message => "Usuario $samAccountName creado correctamente." });
+print encode_json({ success => "Usuario $samAccountName creado correctamente." });
